@@ -1,0 +1,14 @@
+= content_for :content
+
+  - if content_for? :pagelet_heading_actions
+    = yield :pagelet_heading_actions
+
+  = yield
+
+  - if content_for? :pagelet_footer
+    = yield :pagelet_footer
+
+  - if content_for? :pagelet_outside_end
+    = yield :pagelet_outside_end
+
+= render template: 'layouts/pagelets/container'

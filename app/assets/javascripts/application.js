@@ -13,4 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+
+//= require jquery.transit
+//= require jquery.pjax
+//= require pjax_widget
+
 //= require_tree .
