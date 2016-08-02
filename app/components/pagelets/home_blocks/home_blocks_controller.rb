@@ -5,7 +5,7 @@ class Pagelets::HomeBlocks::HomeBlocksController < Pagelets::BaseController
   end
 
   def show
-    sleep 1
+    # sleep 1
     render params[:id]
   end
 end

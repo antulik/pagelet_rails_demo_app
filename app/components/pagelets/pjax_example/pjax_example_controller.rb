@@ -7,7 +7,7 @@ class Pagelets::PjaxExample::PjaxExampleController < Pagelets::BaseController
   pagelet_options pjax: true
 
   def show
-    sleep 1
+    # sleep 1
   end
 
 end

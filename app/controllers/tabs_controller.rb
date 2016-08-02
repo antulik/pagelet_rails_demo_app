@@ -1,7 +1,7 @@
 class TabsController < ApplicationController
 
   def show
-    sleep rand(2) + 1
+    # sleep rand(2) + 1
 
     render params[:id]
   end
