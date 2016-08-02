@@ -1,0 +1,44 @@
+= render partial: 'jumbotron'
+
+
+.row
+  .col-md-6.col-md-offset-3
+
+    h1 One
+    p First of all you need to have a controller and include helper methods
+    pre
+      code
+        |
+
+          class Pagelets::HomeBlocks::HomeBlocksController < ApplicationController
+            include Pagelets::Concerns::Controller
+
+            pagelet_routes do
+              resources :home_blocks
+            end
+
+            def show
+              render params[:id]
+            end
+          end
+
+    h1 Two
+
+    p Add line to your <code>config/routes.rb</code> file to load inline routes:
+
+    pre
+      code
+        |Pagelets::Router.load_routes!(self)
+
+    h1 Three
+    p Then you can use <code>pagelet</code> helper provided in your views:
+
+    pre
+      code
+        |<%= pagelet :pagelets_home_block, params: {id: 123} %>
+
+    p in this example pagelet at path <code>pagelets_home_block_path(id: 123)</code> will be rendered inline
+
+    h1 Four
+
+    p That's it, you are done, there is no four :)

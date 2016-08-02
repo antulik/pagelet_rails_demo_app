@@ -1,15 +1,17 @@
-- if request.xhr? && !pagelet_options.force_pagelet_container
-  = content_for?(:content) ? yield(:content) : yield
+ruby:
+  html_opts = pagelet_options.html_opts || {}
+  classes = html_opts.fetch(:class, '').split(' ')
+  classes << "pagelet-#{controller_name}"
+  classes << "pagelet-#{controller_name}-#{action_name}"
+  html_opts[:class] = classes.join(' ')
 
-- else
-  ruby:
-    html_opts = pagelet_options.html_opts || {}
-    classes = html_opts.fetch(:class, '').split(' ')
-    classes << "pagelet-#{controller_name}"
-    classes << "pagelet-#{controller_name}-#{action_name}"
-    html_opts[:class] = classes.join(' ')
+  html_opts['data-pjax'] = true if pagelet_options.pjax
 
-    html_opts['data-pjax'] = true if pagelet_options.pjax
-
+- content_for :root_content
   div *html_opts
     = content_for?(:content) ? yield(:content) : yield
+
+- if pagelet_embedded?
+  = yield(:root_content)
+- else
+  = render template: 'layouts/root'

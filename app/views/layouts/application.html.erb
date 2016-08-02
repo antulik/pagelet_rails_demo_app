@@ -1,14 +1,28 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Rails5</title>
-    <%= csrf_meta_tags %>
+<% content_for :root_content do %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <!-- The justified navigation menu is meant for single line per list item.
+       Multiple lines will require custom code not provided by Bootstrap. -->
+  <div class="masthead">
+    <h3 class="text-muted">Project name</h3>
+    <nav>
+      <ul class="nav nav-justified">
+        <li><a href="<%= root_path %>">Home</a></li>
+        <li><a href="<%= tab_path('how_to') %>">How to Use</a></li>
+        <li><a href="<%= tab_path('remote') %>">Remote</a></li>
+        <li><a href="<%= tab_path('pjax') %>">Pjax</a></li>
+        <!--<li><a href="<%= tab_path('about') %>">About</a></li>-->
+        <!--<li><a href="<%= tab_path('contact') %>">Contact</a></li>-->
+      </ul>
+    </nav>
+  </div>
 
-  <body>
-    <%= yield %>
-  </body>
-</html>
+  <%= content_for?(:application_content) ? yield(:application_content) : yield %>
+
+  <footer class="footer">
+    <p>&copy; 2015 Company, Inc.</p>
+  </footer>
+
+<% end %>
+
+<%= render template: 'layouts/root' %>
+

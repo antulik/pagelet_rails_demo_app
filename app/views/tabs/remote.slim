@@ -1,0 +1,14 @@
+= render partial: 'jumbotron'
+
+.row
+  .col-lg-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_true'},
+      remote: false
+
+  .col-lg-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_turbolinks'},
+      remote: :turbolinks
+
+  .col-lg-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_true'},
+      remote: true

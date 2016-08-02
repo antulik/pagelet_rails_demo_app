@@ -27,10 +27,15 @@ module PageletsHelper
     silence_log "Pagelet rendered #{args}" do
       controller = nil
       action = nil
+      pagelet_params = html_opts.delete(:params) { {} }.with_indifferent_access
 
       case args.size
       when 1
         path = args[0]
+        if path.is_a? Symbol
+          path = self.send("#{path}_path", pagelet_params)
+        end
+
         path_opts = Rails.application.routes.recognize_path(path)
         controller = path_opts[:controller].camelize.concat('Controller').constantize
         action = path_opts[:action]
@@ -42,20 +47,21 @@ module PageletsHelper
 
       c = controller.new
 
-      pagelet_params = html_opts.delete(:params) { {} }
+
       pagelet_params.reverse_merge!(params.except(:controller, :action))
         .merge!(controller: c.controller_path, action: action)
 
       pagelet_options = pagelet_extract_opts!(html_opts)
       pagelet_options = pagelet_options.deep_merge(
         html_opts: html_opts,
-        parent_params: params
+        parent_params: params,
+        embedded: true
       )
 
       PageletHookModule.apply_hook c, action
 
       c.pagelet_options pagelet_options
-      c.params = pagelet_params
+      # c.params = pagelet_params
 
       env = request.env.deep_dup
       pagelet_request = ActionDispatch::Request.new(env)
@@ -70,7 +76,7 @@ module PageletsHelper
   end
 
   def pagelet_extract_opts!(html_opts)
-    result = html_opts.extract!(:height, :pjax, :remote)
+    result = html_opts.extract!(:placeholder_height, :pjax, :remote)
     result.merge!(html_opts.delete(:pagelet_options) { {} })
     result
   end
@@ -98,7 +104,17 @@ module PageletsHelper
     end
 
     def render_remote_load
-      return unless pagelet_options.remote
+      case pagelet_options.remote
+      when :turbolinks
+        # render now if request coming from turbolinks
+        is_turbolinks_request = !!request.headers['Turbolinks-Referrer']
+        return if is_turbolinks_request
+      when true
+        # keep going and render placeholder
+      else
+        # render now
+        return
+      end
 
       encode_data = @pagelet_options.fetch('default').except('remote')
       original_pagelet_options = Encryptor::Handler.encode(encode_data)

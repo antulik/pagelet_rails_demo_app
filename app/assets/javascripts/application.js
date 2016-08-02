@@ -16,6 +16,7 @@
 
 //= require jquery.transit
 //= require jquery.pjax
-//= require pjax_widget
+//= require widget
+// require pjax_widget
 
-//= require_tree .
+// require_tree .

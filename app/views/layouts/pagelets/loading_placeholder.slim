@@ -1,15 +1,13 @@
 ruby:
-  height = pagelet_options.height || 170
-  height -= 32 # border offsets
+  height = pagelet_options.placeholder_height
+  height = height.is_a?(Numeric) ? "#{height}px" : 'auto'
 
-
-.panel-body
-  div style="display: table; height: #{height}px; overflow: hidden; width: 100%;"
-    div style="display: table-cell; vertical-align: middle;"
-      div.text-center
-        span.spinner.spinner-three-bounce
-          .bounce1
-          .bounce2
-          .bounce3
-        br
-        span Loading ...
+div style="display: table; height: #{height}; overflow: hidden; width: 100%;"
+  div style="display: table-cell; vertical-align: middle;"
+    div.text-center
+      span.spinner.spinner-three-bounce
+        .bounce1
+        .bounce2
+        .bounce3
+      br
+      span Loading ...
