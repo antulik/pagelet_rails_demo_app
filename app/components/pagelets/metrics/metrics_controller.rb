@@ -4,7 +4,7 @@ class Pagelets::Metrics::MetricsController < Pagelets::BaseController
 
   def index
     @total_comments = Comment.count
-    @last_comment_at = Comment.last.created_at
+    @last_comment_at = Comment.last.try(:created_at)
   end
 
 end
