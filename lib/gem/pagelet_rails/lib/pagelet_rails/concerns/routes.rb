@@ -1,4 +1,4 @@
-module Pagelets::Concerns::Routes
+module PageletRails::Concerns::Routes
   extend ActiveSupport::Concern
 
   module ClassMethods
@@ -15,7 +15,7 @@ module Pagelets::Concerns::Routes
     # Define inline single route for the following method.
     # It automatically adds :controller and :action names to the route
     #
-    #     class Pagelets::Examples::ExamplesController
+    #     class PageletRails::Examples::ExamplesController
     #       pageletlet_route :get, ''
     #       def bingo
     #       end

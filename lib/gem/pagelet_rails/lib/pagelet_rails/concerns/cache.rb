@@ -1,4 +1,4 @@
-module Pagelets::Concerns::Cache
+module PageletRails::Concerns::Cache
   extend ActiveSupport::Concern
 
   module ClassMethods

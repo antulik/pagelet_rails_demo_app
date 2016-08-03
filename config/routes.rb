@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   root 'dashboard#index'
   resources :tabs
 
-  Pagelets::Router.load_routes!(self)
+  PageletRails::Router.load_routes!(self)
 
 end

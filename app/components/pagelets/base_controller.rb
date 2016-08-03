@@ -1,4 +1,4 @@
 class Pagelets::BaseController < ::ApplicationController
-  include Pagelets::Concerns::Controller
+  include PageletRails::Concerns::Controller
 
 end

@@ -1,10 +1,10 @@
-module Pagelets::Concerns::Controller
+module PageletRails::Concerns::Controller
   extend ActiveSupport::Concern
 
   included do
-    include Pagelets::Concerns::Routes
-    include Pagelets::Concerns::Options
-    # include Pagelets::Concerns::Cache
+    include PageletRails::Concerns::Routes
+    include PageletRails::Concerns::Options
+    # include PageletRails::Concerns::Cache
 
     self.view_paths = ['app/components/', 'app/views', 'app/views_partials']
 

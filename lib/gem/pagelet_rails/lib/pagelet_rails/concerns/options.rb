@@ -1,4 +1,4 @@
-module Pagelets::Concerns::Options
+module PageletRails::Concerns::Options
   extend ActiveSupport::Concern
 
   included do

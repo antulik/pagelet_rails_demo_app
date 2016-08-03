@@ -1,4 +1,4 @@
-class Pagelets::Router
+class PageletRails::Router
 
   def self.load_routes! context
     controllers = Dir[Rails.root.join('app','components', 'pagelets', '*', '*controller.rb')]

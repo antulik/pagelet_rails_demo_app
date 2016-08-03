@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.3.1'
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery.transit'
   # gem 'rails-assets-pjax'
@@ -41,6 +43,7 @@ gem 'jbuilder', '~> 2.5'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'sqlite3'
 end
 
 gem 'slim'
