@@ -1,3 +1,9 @@
+PATH
+  remote: lib/gem
+  specs:
+    pagelet_rails (0.1.0)
+      rails (~> 5.0.0)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -178,6 +184,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)
+  pagelet_rails!
   pg
   pjax_rails
   rails (~> 5.0.0)

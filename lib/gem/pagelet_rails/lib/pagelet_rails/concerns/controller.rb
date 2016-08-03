@@ -19,7 +19,7 @@ module PageletRails::Concerns::Controller
 
     helper_method :pagelet_embedded?
 
-    pagelet_options pjax: false, layout: 'body'
+    pagelet_options pjax: false, layout: 'panel'
   end
 
   def layout_name

@@ -1,10 +1,9 @@
 = render partial: 'jumbotron'
 
-
 .row
   .col-md-6.col-md-offset-3
 
-    h1 One
+    h1 One - Create controller
     p First of all you need to have a controller and include helper methods
     pre
       code
@@ -22,15 +21,7 @@
             end
           end
 
-    h1 Two
-
-    p Add line to your <code>config/routes.rb</code> file to load inline routes:
-
-    pre
-      code
-        |PageletRails::Router.load_routes!(self)
-
-    h1 Three
+    h1 Two - Use it as pagelet
     p Then you can use <code>pagelet</code> helper provided in your views:
 
     pre
@@ -38,7 +29,3 @@
         |<%= pagelet :pagelets_home_block, params: {id: 123} %>
 
     p in this example pagelet at path <code>pagelets_home_block_path(id: 123)</code> will be rendered inline
-
-    h1 Four
-
-    p That's it, you are done, there is no four :)

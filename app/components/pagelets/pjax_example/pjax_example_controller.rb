@@ -1,8 +1,6 @@
 class Pagelets::PjaxExample::PjaxExampleController < Pagelets::BaseController
 
-  pagelet_routes do
-    resources :pjax_example
-  end
+  pagelet_resources only: :show
 
   pagelet_options pjax: true
 

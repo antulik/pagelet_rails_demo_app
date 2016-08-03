@@ -1,8 +1,6 @@
 class Pagelets::HomeBlocks::HomeBlocksController < Pagelets::BaseController
 
-  pagelet_routes do
-    resources :home_blocks
-  end
+  pagelet_resources only: :show
 
   def show
     # sleep 1
