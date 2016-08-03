@@ -1,5 +1,10 @@
 .row
   .col-sm-3
   .col-sm-6
+    = pagelet :new_pagelets_comment, remote: :turbolinks, title: 'remote: :turbolinks'
 
+    = pagelet :pagelets_comments, remote: :turbolinks, title: 'remote: :turbolinks'
   .col-sm-3
+    = pagelet :pagelets_metrics, remote: false, title: 'remote: false'
+    = pagelet :pagelets_metrics, remote: :turbolinks, title: 'remote: :turbolinks'
+    = pagelet :pagelets_metrics, remote: true, title: 'remote: true'

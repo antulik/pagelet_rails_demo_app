@@ -1,5 +1,5 @@
 ruby:
-  html_opts = pagelet_options.html_opts || {}
+  html_opts = pagelet_options.html || {}
   classes = html_opts.fetch(:class, '').split(' ')
   classes << "pagelet-#{controller_name}"
   classes << "pagelet-#{controller_name}-#{action_name}"

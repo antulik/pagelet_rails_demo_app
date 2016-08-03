@@ -22,12 +22,12 @@ module PageletsHelper
   end
 
   def pagelet *args
-    html_opts = args.extract_options!
+    opts = args.extract_options!
 
     silence_log "Pagelet rendered #{args}" do
       controller = nil
       action = nil
-      pagelet_params = html_opts.delete(:params) { {} }.with_indifferent_access
+      pagelet_params = opts.delete(:params) { {} }.with_indifferent_access
 
       case args.size
       when 1
@@ -51,10 +51,8 @@ module PageletsHelper
       pagelet_params.reverse_merge!(params.except(:controller, :action))
         .merge!(controller: c.controller_path, action: action)
 
-      pagelet_options = pagelet_extract_opts!(html_opts)
-      pagelet_options = pagelet_options.deep_merge(
-        html_opts: html_opts,
-        parent_params: params,
+      pagelet_options = opts.deep_merge(
+        parent_params: params.to_h,
         embedded: true
       )
 
@@ -73,12 +71,6 @@ module PageletsHelper
       body = c.response.body
       body.html_safe
     end
-  end
-
-  def pagelet_extract_opts!(html_opts)
-    result = html_opts.extract!(:placeholder_height, :pjax, :remote)
-    result.merge!(html_opts.delete(:pagelet_options) { {} })
-    result
   end
 
   # This is hack to simulate before_action.
@@ -122,7 +114,7 @@ module PageletsHelper
       data = params.merge(original_pagelet_options: original_pagelet_options)
       data.permit!
 
-      pagelet_options html_opts: { 'data-widget-url' => url_for(data) }
+      pagelet_options html: { 'data-widget-url' => url_for(data) }
 
       if pagelet_options.loading_placeholder
         instance_exec &pagelet_options.loading_placeholder

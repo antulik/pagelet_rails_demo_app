@@ -1,0 +1,10 @@
+.panel-heading = pagelet_options.title
+
+ul.list-group
+  li.list-group-item
+    span.badge = @total_comments
+    |Total comments
+  li.list-group-item
+    span.badge #{time_ago_in_words(@last_comment_at)}
+    |Last comment ago
+

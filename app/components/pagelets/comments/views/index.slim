@@ -1,0 +1,10 @@
+.panel-heading = pagelet_options.title
+
+.list-group
+  - @comments.each do |comment|
+    .list-group-item
+      h4.list-group-item-heading
+        = comment.author_name
+        small< #{time_ago_in_words(comment.created_at)} ago
+      p.list-group-item-text
+        = comment.message

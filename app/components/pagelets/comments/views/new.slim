@@ -1,0 +1,14 @@
+.panel-heading = pagelet_options.title
+  
+.panel-body
+  = form_for @comment, url: pagelets_comments_path, remote: true,
+    html: {class: 'form-horizontal'} do |f|
+    .form-group
+      label.col-sm-2.control-label Name
+      .col-sm-10 = f.text_field :author_name, class: 'form-control'
+    .form-group
+      label.col-sm-2.control-label Comment
+      .col-sm-10 = f.text_area :message, class: 'form-control'
+    .form-group
+      .col-sm-offset-2.col-sm-10
+        = f.submit "Post", class: 'btn btn-default'

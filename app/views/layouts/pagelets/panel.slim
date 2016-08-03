@@ -3,8 +3,7 @@
     - if content_for? :panel_heading
       .panel-heading = yield :panel_heading
 
-    .panel-body
-      = yield
+    = yield
 
     - if content_for? :panel_footer
       .panel-footer = yield :panel_footer
