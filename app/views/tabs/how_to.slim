@@ -1,33 +1,38 @@
-= render partial: 'jumbotron'
 
 .row
-  .col-md-6.col-md-offset-3
+  .col-sm-4
 
-    h1 One - Create controller
+    h1 1. Create controller
     p First of all you need to have a controller and include helper methods
     pre
       code
         |
 
-          class Pagelets::Metrics::MetricsController < ::ApplicationController
-            include PageletRails::Concerns::Controller
+          class Pagelets::CurrentTime::CurrentTimeController < Pagelets::BaseController
 
-            pagelet_resources only: [:index]
+            pagelet_resource only: [:show]
 
-            def index
-              @total_comments = Comment.count
-              @last_comment_at = Comment.last.created_at
+            def show
             end
 
           end
 
-    h1 Two - Use it as pagelet
+    p
+      |Note:
+      code> pagelet_resource
+      |is a shortcut for routes
+      code> resource :current_time
+
+  .col-sm-4
+    h1 2. Use it as pagelet
     p Then you can use <code>pagelet</code> helper provided in your views:
 
     pre
       code
-        |<%= pagelet :pagelets_metrics, remote: true %>
+        |<%= pagelet :pagelets_current_time %>
 
-    h1 Result
+    p Note: pagelet name is the same as <code>pagelets_current_time_path()</code> route
 
-    = pagelet :pagelets_metrics, remote: true
+  .col-sm-4
+    h1 3. Result
+    = pagelet :pagelets_current_time

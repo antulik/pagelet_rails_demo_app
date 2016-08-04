@@ -19,6 +19,16 @@ module PageletRails::Concerns::Routes
       end
     end
 
+    def pagelet_resource *args, &block
+      controller_name = self.controller_name
+      opts = args.extract_options!
+      opts[:controller] ||= controller_name
+
+      @pagelet_routes << Proc.new do
+        resource controller_name, *args, opts, &block
+      end
+    end
+
     # Define inline single route for the following method.
     # It automatically adds :controller and :action names to the route
     #

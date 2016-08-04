@@ -1,26 +1,37 @@
 <% content_for :root_content do %>
 
-  <!-- The justified navigation menu is meant for single line per list item.
-       Multiple lines will require custom code not provided by Bootstrap. -->
-  <div class="masthead">
-    <h3 class="text-muted">pagelet_rails</h3>
-    <nav>
-      <ul class="nav nav-justified">
-        <li><a href="<%= root_path %>">About</a></li>
-        <li><a href="<%= tab_path('how_to') %>">How to Use</a></li>
-        <li><a href="<%= tab_path('remote') %>">Remote</a></li>
-        <li><a href="<%= tab_path('pjax') %>">Pjax</a></li>
-        <li><a href="<%= tab_path('comments') %>">Comments</a></li>
-        <!--<li><a href="<%= tab_path('contact') %>">Contact</a></li>-->
-      </ul>
-    </nav>
-  </div>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">pagelet_rails</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+
+
+          <%= li_menu 'About', root_path %>
+          <%= li_menu 'How to Use', tab_path('how_to') %>
+          <%= li_menu 'Remote', tab_path('remote') %>
+          <%= li_menu 'Pjax', tab_path('pjax') %>
+          <%= li_menu 'Comments example', tab_path('comments') %>
+
+        </ul>
+        <!--<ul class="nav navbar-nav navbar-right">-->
+          <!--<li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>-->
+          <!--<li><a href="../navbar-static-top/">Static top</a></li>-->
+          <!--<li><a href="../navbar-fixed-top/">Fixed top</a></li>-->
+        <!--</ul>-->
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
 
   <%= content_for?(:application_content) ? yield(:application_content) : yield %>
-
-  <footer class="footer">
-    <p>&copy; 2015 Company, Inc.</p>
-  </footer>
 
 <% end %>
 

@@ -1,8 +1,8 @@
 class Pagelets::Metrics::MetricsController < Pagelets::BaseController
 
-  pagelet_resources only: [:index]
+  pagelet_resource only: [:show]
 
-  def index
+  def show
     @total_comments = Comment.count
     @last_comment_at = Comment.last.try(:created_at)
   end
