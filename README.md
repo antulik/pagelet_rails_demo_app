@@ -93,7 +93,9 @@ Notes:
  
 # Pagelet helper
 
-`pagelet` helper allows you to render pagelets in views. 
+`pagelet` helper allows you to render pagelets in views. Name of pagelet is his path. 
+
+For example pagelet with route `pagelets_current_time_path` will have `pagelets_current_time` name.
 
 ## remote
 
@@ -105,7 +107,7 @@ Example
 Options for `remote`:
 * `true` - always render pagelet through ajax
 * `:turbolinks`  - render pagelet throught ajax, but inline if it's a turbolinks page visit
-* anything else - render inline
+* `false` or missing - render inline
 
 ## params
 
@@ -152,7 +154,7 @@ You can pass any other data and it will be available in `pagelet_options`
 
 # Pagelet options
 
-`pagelet_options` is similar to `params` object, but for private data and config.
+`pagelet_options` is similar to `params` object, but for private data and config. Options can be global for all actions or specific actions only.
 
 ```ruby
 class CurrentTime::CurrentTimeController < ::ApplicationController
