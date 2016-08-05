@@ -41,7 +41,7 @@ module PageletRails::Concerns::Controller
 
   def check_parent_params
     if params[:original_pagelet_options]
-      opts = PageletRails::Encryptor::Handler.decode(params[:original_pagelet_options])
+      opts = PageletRails::Encryptor.decode(params[:original_pagelet_options])
       pagelet_options(opts)
     end
   end
