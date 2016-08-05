@@ -1,50 +1,9 @@
 .row
   .col-sm-3
   .col-sm-6
+    p This is example project of using pagelets in rails
 
-    h1 Rails Pagelet
-    p class="lead" This is example project of using pagelets in rails
-
-    h1 What is pagelet?
-
-    p Pagelet is a single unit of functionality which could be displayed on the page. You can break a web page into number of pagelets, where each one will be responsible for its own functionality. The closest alternative is #{link_to 'cells', 'https://github.com/apotonick/cells'} gem, but it's no way near of what this can do.
-
-    p = link_to 'View sources' , 'https://github.com/antulik/pagelet'
-
-    h1 Origin
-
-    p Originally I saw such solution implemented at facebook and linkedin.
-      Each page consists of
-      small blocks, where each is responsible for it's own functionality and does not
-      depend on the page where it's included. You can read more on that below.
-
-    = image_tag 'https://camo.githubusercontent.com/50f4078cc4015e3df89afc753a5ff79828ac0e8e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f662e636c2e6c792f6974656d732f303031323133314d324b3147335831483276314f2f313433303033383036373738372e6a7067', width: '100%'
-
-    h1 Why
-
-    ul
-      li Improves perceived performance
-      li Forces you to separate complex page into simple components
-      li Works with Turbolinks
-      li Make interactive components with PJAX
-      li ultimate benefits when used with HTTP/2
-      li Components could be easily cached
-      li "Seemless caching" - renders inline if component cached, otherwise renders as a separate request
-
-    h1 TODO
-
-    ul
-      li PJAX support
-      li package as gem
-      li batch request
-      li streaming of components at the end of body
-      li partial updates
-
-    h1 More info
-
-    ul
-      li = link_to 'BigPipe: Pipelining web pages for high performance', 'https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919/'
-      li = link_to 'Engineering the New LinkedIn Profile', 'https://engineering.linkedin.com/profile/engineering-new-linkedin-profile'
+    = link_to "View Readme", 'https://github.com/antulik/pagelet'
 
   .col-sm-3
 
