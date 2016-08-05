@@ -18,7 +18,7 @@ The page body is served instantly and all the data is loaded after. Even for fac
 
 Originally I saw such solution implemented at facebook and linkedin. Each page consists of small blocks, where each is responsible for it's own functionality and does not depend on the page where it's included. You can read more on that below.
 
-* [BigPipe: Pipelining web pages for high performance]('https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919/')
+* [BigPipe: Pipelining web pages for high performance](https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919/)
 * [Engineering the New LinkedIn Profile](https://engineering.linkedin.com/profile/engineering-new-linkedin-profile)
 
 # What is Pagelet?
@@ -48,6 +48,7 @@ end
 ``` 
 
 Notes: 
+
 1. Extend your normal rails controller 
 2. `pagelet_resource` is shortcut for inline route `resource`
 3. Normal rails action
@@ -66,6 +67,7 @@ Notes:
 </div>
 ```
 Notes:
+
 1. View path is `app/pagelets/current_time/views/show.erb`
 
 
@@ -78,10 +80,11 @@ And now use it anywhere in your view
 ```
 
 Notes:
+
 1. Name of the pagelet is his route. In this example `pagelets_current_time` is `pagelets_current_time_path`.
  
  
-# Pagelet helper
+# Pagelet helper options
 
 ## remote
 
