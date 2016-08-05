@@ -20,7 +20,9 @@ gem 'pagelet_rails', path: 'lib/gem'
 gem 'bootstrap_form'
 
 # Use Puma as the app server
-# gem 'puma', '~> 3.0'
+group :production do
+  gem 'puma', '~> 3.0'
+end
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -52,6 +54,7 @@ end
 
 gem 'slim'
 gem 'ejs'
+gem "octokit", "~> 4.0"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.

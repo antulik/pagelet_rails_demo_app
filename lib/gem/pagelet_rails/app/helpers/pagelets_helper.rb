@@ -109,10 +109,7 @@ module PageletsHelper
         return
       end
 
-      # encode_data = @pagelet_options.fetch('default').except('remote')
-      # original_pagelet_options = Encryptor::Handler.encode(encode_data)
-
-      data = params.deep_dup #. .merge(original_pagelet_options: original_pagelet_options)
+      data = params.deep_dup
       data.permit!
 
       pagelet_options html: { 'data-widget-url' => url_for(data) }

@@ -6,13 +6,13 @@ module PageletRails::Concerns::Controller
     include PageletRails::Concerns::Options
     # include PageletRails::Concerns::Cache
 
-    self.view_paths = ['app/components/', 'app/views', 'app/views_partials']
+    self.view_paths = ['app/pagelets/', 'app/views', 'app/views_partials']
 
     prepend_before_action :check_parent_params
 
     before_action do
       lookup_context.prefixes.clear
-      lookup_context.prefixes.unshift "pagelets/#{controller_name}/views"
+      lookup_context.prefixes.unshift "#{controller_name}/views"
     end
 
     layout :layout_name
@@ -41,11 +41,8 @@ module PageletRails::Concerns::Controller
 
   def check_parent_params
     if params[:original_pagelet_options]
-      opts = Encryptor::Handler.decode(params[:original_pagelet_options])
+      opts = PageletRails::Encryptor::Handler.decode(params[:original_pagelet_options])
       pagelet_options(opts)
-
-      puts opts
-      puts pagelet_options
     end
   end
 

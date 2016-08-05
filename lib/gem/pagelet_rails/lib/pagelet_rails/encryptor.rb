@@ -1,4 +1,4 @@
-module Encryptor
+module PageletRails::Encryptor
   class Handler
 
     DEFAULT_SALT = '!@#Q156^tdSXggT0&*789++8&?_|T%\/++==RqE'

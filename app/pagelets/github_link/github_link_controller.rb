@@ -1,4 +1,4 @@
-class Pagelets::GithubLink::GithubLinkController < Pagelets::BaseController
+class GithubLink::GithubLinkController < ::PageletController
 
   pagelet_resource only: [:show]
 

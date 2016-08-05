@@ -1,0 +1,7 @@
+.panel-body
+  h4 Stargazers for #{@repo}
+
+  .row
+    - @result.each do |user|
+      .col-sm-2
+        = image_tag user[:avatar_url], style: 'width: 100%;'

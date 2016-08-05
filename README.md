@@ -122,6 +122,15 @@ Example
 
 pass html attributes to pagelet
 
+## placeholder
+
+```erb
+<%= pagelet :pagelets_current_time, placeholder: { text: 'Loading...', height: 300 } %>
+```
+
+Configuration for placeholder before pagelet is loaded.
+
+
 ## other
 
 You can pass any other data and it will be available in `pagelet_options`
@@ -138,6 +147,10 @@ You can pass any other data and it will be available in `pagelet_options`
 #...
 ```
 
+
+# pagelet_options
+
+TODO
 
 # Advance functionality
 

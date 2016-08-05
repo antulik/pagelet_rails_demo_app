@@ -1,4 +1,4 @@
-class Pagelets::Comments::CommentsController < Pagelets::BaseController
+class Comments::CommentsController < ::PageletController
 
   pagelet_resources only: [:show, :new, :create, :index, :destroy]
 

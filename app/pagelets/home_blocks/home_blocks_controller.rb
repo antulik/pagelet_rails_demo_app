@@ -1,4 +1,4 @@
-class Pagelets::HomeBlocks::HomeBlocksController < Pagelets::BaseController
+class HomeBlocks::HomeBlocksController < ::PageletController
 
   pagelet_resources only: :show
 

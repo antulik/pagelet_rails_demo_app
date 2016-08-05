@@ -3,7 +3,7 @@
     = pagelet :pagelets_current_time, remote: true
     = pagelet :pagelets_github_link, remote: :turbolinks, files: { \
         'This Tab View': 'app/views/tabs/comments.slim', \
-        'Comments Pagelet Controller': 'app/components/pagelets/comments/comments_controller.rb' \
+        'Comments Pagelet Controller': 'app/pagelets/comments/comments_controller.rb' \
       }
   .col-sm-6
     = pagelet :new_pagelets_comment, remote: :turbolinks,

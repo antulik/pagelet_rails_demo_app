@@ -15,6 +15,6 @@
 //= require turbolinks
 
 //= require jquery.transit
-//= require_tree ./views
-//= require widget
+//= require pagelet_rails
+
 
