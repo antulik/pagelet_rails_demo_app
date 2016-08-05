@@ -13,7 +13,7 @@ This is example project of using pagelets in Rails
 
 Don't make your users wait for page to load.
  
- # Example
+# Example
  
 ![](https://camo.githubusercontent.com/50f4078cc4015e3df89afc753a5ff79828ac0e8e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f662e636c2e6c792f6974656d732f303031323133314d324b3147335831483276314f2f313433303033383036373738372e6a7067)
 
