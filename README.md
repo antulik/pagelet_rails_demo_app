@@ -1,24 +1,5 @@
-# README
+# pagelet_rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a demo rails application which demonstrates pagelet functionality.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[Demo](https://polar-river-18908.herokuapp.com)

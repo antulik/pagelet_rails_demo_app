@@ -1,0 +1,6 @@
+.panel-heading View Sources
+
+ul.list-group
+  - @files.each do |name, url|
+    li.list-group-item
+      = link_to name, url, target: :blank
