@@ -1,6 +1,6 @@
 class Pagelets::Comments::CommentsController < Pagelets::BaseController
 
-  pagelet_resources only: [:show, :new, :create, :index]
+  pagelet_resources only: [:show, :new, :create, :index, :destroy]
 
   def index
     @comments = Comment.all.order(id: :desc)
@@ -15,15 +15,21 @@ class Pagelets::Comments::CommentsController < Pagelets::BaseController
     @comment = Comment.new attrs
 
     if @comment.save
-      render :create, layout: false
+      redirect_to tab_path('comments')
     else
-      render :create_error, layout: false
+      render :new
     end
-
   end
 
   def show
-    # sleep 1
-    render params[:id]
+  end
+
+  def destroy
+    comment = Comment.find params[:id]
+
+    if comment.destroy
+      index
+      render :index
+    end
   end
 end

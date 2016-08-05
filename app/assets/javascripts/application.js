@@ -15,8 +15,6 @@
 //= require turbolinks
 
 //= require jquery.transit
-//= require jquery.pjax
+//= require_tree ./views
 //= require widget
-// require pjax_widget
 
-// require_tree .

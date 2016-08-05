@@ -3,15 +3,19 @@ ruby:
   classes = html_opts.fetch(:class, '').split(' ')
   classes << "pagelet-#{controller_name}"
   classes << "pagelet-#{controller_name}-#{action_name}"
+
+  html_opts[:id] ||= "pagelet_#{rand(2**60).to_s(36)}"
   html_opts[:class] = classes.join(' ')
 
-  html_opts['data-pjax'] = true if pagelet_options.pjax
+  html_opts['data-pagelet-container'] = true
 
-- content_for :root_content
+  encode_data = pagelet_options.original_options.to_h.except('remote', 'embedded')
+  html_opts['data-pagelet-options'] = Encryptor::Handler.encode(encode_data)
+
+  html_opts['data-pjax'] = pagelet_options.pjax if pagelet_options.pjax
+
+- if pagelet_request?
+  = content_for?(:content) ? yield(:content) : yield
+- else
   div *html_opts
     = content_for?(:content) ? yield(:content) : yield
-
-- if pagelet_embedded?
-  = yield(:root_content)
-- else
-  = render template: 'layouts/root'

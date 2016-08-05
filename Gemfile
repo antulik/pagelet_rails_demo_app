@@ -5,6 +5,7 @@ ruby '2.3.1'
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery.transit'
   # gem 'rails-assets-pjax'
+  # gem 'rails-assets-jquery-pjax'
   gem 'rails-assets-bootstrap', '3.3.6'
 end
 
@@ -16,6 +17,7 @@ gem 'rails', '~> 5.0.0'
 gem 'pg'
 
 gem 'pagelet_rails', path: 'lib/gem'
+gem 'bootstrap_form'
 
 # Use Puma as the app server
 # gem 'puma', '~> 3.0'
@@ -49,7 +51,6 @@ group :development, :test do
 end
 
 gem 'slim'
-gem 'pjax_rails'
 gem 'ejs'
 
 group :development do
@@ -62,6 +63,8 @@ group :development do
 
   gem 'binding_of_caller'
   gem 'better_errors'
+
+  gem 'pry-rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

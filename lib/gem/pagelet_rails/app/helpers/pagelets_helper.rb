@@ -59,6 +59,7 @@ module PageletsHelper
       PageletHookModule.apply_hook c, action
 
       c.pagelet_options pagelet_options
+      c.pagelet_options original_options: pagelet_options
       # c.params = pagelet_params
 
       env = request.env.deep_dup
@@ -108,10 +109,10 @@ module PageletsHelper
         return
       end
 
-      encode_data = @pagelet_options.fetch('default').except('remote')
-      original_pagelet_options = Encryptor::Handler.encode(encode_data)
+      # encode_data = @pagelet_options.fetch('default').except('remote')
+      # original_pagelet_options = Encryptor::Handler.encode(encode_data)
 
-      data = params.merge(original_pagelet_options: original_pagelet_options)
+      data = params.deep_dup #. .merge(original_pagelet_options: original_pagelet_options)
       data.permit!
 
       pagelet_options html: { 'data-widget-url' => url_for(data) }
@@ -122,6 +123,7 @@ module PageletsHelper
         render 'layouts/pagelets/loading_placeholder', layout: layout_name
       end
     end
+
   end
 
 end

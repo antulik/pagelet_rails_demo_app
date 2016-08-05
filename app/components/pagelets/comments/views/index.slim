@@ -3,8 +3,12 @@
 .list-group
   - @comments.each do |comment|
     .list-group-item
+      .pull-right
+        = link_to 'Delete', pagelets_comment_path(comment), method: :delete, remote: true
       h4.list-group-item-heading
         = comment.author_name
         small< #{time_ago_in_words(comment.created_at)} ago
       p.list-group-item-text
         = comment.message
+
+

@@ -4,10 +4,17 @@ function load_widget_url(elem_id) {
   if (path) {
     $.ajax({
       url: path,
+      data: {
+        target_container: elem_id,
+        original_pagelet_options: $el.data('pagelet-options')
+      },
+      dataType: 'script',
       headers: {
+        'X-Pagelet': 'pagelet'
       }
     }).done(function(data) {
-      $el.html(data)
+      // $el.html(data);
+      $(document).trigger('pagelet-loaded');
     }).fail(function(){
       var html = JST['views/pagelet_load_failed']({
         pagelet_url: path,
@@ -18,7 +25,60 @@ function load_widget_url(elem_id) {
   }
 }
 
+function process_elements() {
+
+  $('form[data-remote]').each(function(index, elem){
+    var $el = $(elem);
+    var container = $el.closest('[data-pagelet-container]');
+
+    if (!container) {
+      return;
+    }
+
+    var hidden_field = $el.find('input[name=target_container]')[0];
+    if (!hidden_field) {
+      $("<input/>", {
+        name: "target_container",
+        type: "hidden",
+        value: container.attr('id')
+      }).appendTo($el);
+    }
+
+    hidden_field = $el.find('input[name=original_pagelet_options]')[0];
+    if (!hidden_field) {
+      $("<input/>", {
+        name: "original_pagelet_options",
+        type: "hidden",
+        value: container.data('pagelet-options')
+      }).appendTo($el);
+    }
+  });
+
+  $('a[data-remote]').each(function(index, elem){
+    var $el = $(elem);
+    var container = $el.closest('[data-pagelet-container]');
+
+    if (!container) {
+      return;
+    }
+
+    var params = $el.data('params');
+    if (!params) {
+      var value = $.param({
+        target_container: container.attr('id'),
+        original_pagelet_options: container.data('pagelet-options')
+      });
+      $el.data('params', value);
+    }
+  });
+}
+
+$(document).on('pagelet-loaded', function() {
+  process_elements();
+});
+
 document.addEventListener("turbolinks:load", function(){
+  console.log('turbolinks:load');
   function randomStr() {
     return Math.random().toString(36).slice(2);
   }
@@ -36,4 +96,8 @@ document.addEventListener("turbolinks:load", function(){
     var $el = $(elem);
     load_widget_url($el.attr('id'));
   });
+
+
+  process_elements();
 });
+

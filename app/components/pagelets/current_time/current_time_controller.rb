@@ -3,6 +3,9 @@ class Pagelets::CurrentTime::CurrentTimeController < Pagelets::BaseController
   pagelet_resource only: [:show]
 
   def show
-  end
 
+    puts pagelet_options
+
+  end
 end
+
