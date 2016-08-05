@@ -170,7 +170,10 @@ This will partially update the page and replace only that pagelet.
 
 * package as gem
 * batch request
+  > each pagelet makes a separate http call, it's very inefficient for pages with many pagelets. Goal is to group multiple pagelets into single http request. 
 * streaming of components at the end of body
+  > goal is to serve the page with placeholders but hold connection and render pagelets in the same request before `</body>` tag
 * ~~partial updates~~
 * ~~turbolinks support~~
-
+* delay load of not visible pagelets (aka. below the fold)
+  > do not load pagelets which are not visible to the user until user scrolls down. For example like Youtube comments.
