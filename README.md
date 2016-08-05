@@ -91,7 +91,9 @@ Notes:
 1. Name of the pagelet is his route. In this example `pagelets_current_time` is `pagelets_current_time_path`.
  
  
-# Pagelet helper options
+# Pagelet helper
+
+`pagelet` helper allows you to render pagelets in views. 
 
 ## remote
 
@@ -148,11 +150,68 @@ You can pass any other data and it will be available in `pagelet_options`
 ```
 
 
-# pagelet_options
+# Pagelet options
+
+`pagelet_options` is similar to `params` object, but for private data and config.
+
+```ruby
+class CurrentTime::CurrentTimeController < ::ApplicationController
+  include PageletRails::Concerns::Controller
+  
+  pagelet_options remote: true # Set default option for all actions
+  pagelet_options :show, remote: :turbolinks # set option for :show action only
+  
+  def show
+  end
+  
+  def new
+  end
+  
+end
+```
+
+```erb
+<%= pagelet :new_pagelets_current_time %><!-- defaults to remote: true -->
+<%= pagelet :pagelets_current_time %> <!-- defaults to remote: turbolinks -->
+
+<%= pagelet :pagelets_current_time, remote: false %> <!-- force remote: false -->
+```
+
+# Inline routes
+
+Because pagelets are small you will have many of them. In order to keep them under control pagelet_rails provides helpers. 
+
+You can inline routes inside you controller.
+
+```ruby
+class CurrentTime::CurrentTimeController < ::ApplicationController
+  include PageletRails::Concerns::Controller
+  
+  pagelet_resource only: [:show]
+  # same as in config/routes.rb:
+  #
+  # resource :current_time, only: [:show]
+  #
+  
+  pagelet_resources
+  # same as in config/routes.rb:
+  #
+  # resources :current_time
+  #
+    
+  pagelet_routes do
+    # this is the same context as in config/routes.rb:
+    get 'show_me_time' => 'current_time/current_time#show'
+  end
+  
+end
+```
+
+# Pagelet cache
 
 TODO
 
-# Advance functionality
+# Advanced functionality
 
 ## Partial update
 
