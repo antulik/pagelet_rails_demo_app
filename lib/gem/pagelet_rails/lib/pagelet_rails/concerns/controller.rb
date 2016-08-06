@@ -6,7 +6,7 @@ module PageletRails::Concerns::Controller
     include PageletRails::Concerns::Options
     # include PageletRails::Concerns::Cache
 
-    self.view_paths = ['app/pagelets/', 'app/views', 'app/views_partials']
+    self.view_paths.unshift 'app/pagelets/'
 
     prepend_before_action :check_parent_params
 

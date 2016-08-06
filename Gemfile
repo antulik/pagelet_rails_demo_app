@@ -20,9 +20,10 @@ gem 'pagelet_rails', path: 'lib/gem'
 gem 'bootstrap_form'
 
 # Use Puma as the app server
-group :production do
-  gem 'puma', '~> 3.0'
-end
+# gem 'puma', '~> 3.0'
+
+gem "passenger"
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

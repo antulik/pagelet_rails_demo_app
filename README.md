@@ -43,26 +43,22 @@ Pagelet_rails is built on top of Rails and uses it as much as possible. The main
 ```ruby
 # app/pagelets/current_time/current_time_controller.rb
 class CurrentTime::CurrentTimeController < ::ApplicationController
-  include PageletRails::Concerns::Controller #1
+  # Extend your normal Rails controller
+  include PageletRails::Concerns::Controller  
   
-  pagelet_resource only: [:show] #2
+  # `pagelet_resource` is shortcut for inline route `resource`
+  pagelet_resource only: [:show] 
 
   def show
-    #3
+    # Normal Rails action
   end
 
 end
 ``` 
 
-Notes: 
-
-1. Extend your normal Rails controller 
-2. `pagelet_resource` is shortcut for inline route `resource`
-3. Normal Rails action
-
-
 
 ```erb
+<!-- Please note view path -->
 <!-- app/pagelets/current_time/views/show.erb -->
 <div class="panel-heading">Current time</div>
 
@@ -73,11 +69,6 @@ Notes:
   </p>
 </div>
 ```
-Notes:
-
-1. View path is `app/pagelets/current_time/views/show.erb`
-
-
 
 And now use it anywhere in your view
 
@@ -85,11 +76,6 @@ And now use it anywhere in your view
 <!-- app/views/dashboard/show.erb -->
 <%= pagelet :pagelets_current_time %>
 ```
-
-Notes:
-
-1. Name of the pagelet is his route. In this example `pagelets_current_time` is `pagelets_current_time_path`.
- 
  
 # Pagelet helper
 
