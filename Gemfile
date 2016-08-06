@@ -56,6 +56,7 @@ end
 gem 'slim'
 gem 'ejs'
 gem "octokit", "~> 4.0"
+gem "colorize"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -69,6 +70,7 @@ group :development do
   gem 'better_errors'
 
   gem 'pry-rails'
+  gem 'pry-stack_explorer'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

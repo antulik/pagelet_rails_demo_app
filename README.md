@@ -146,13 +146,19 @@ You can pass any other data and it will be available in `pagelet_options`
 class CurrentTime::CurrentTimeController < ::ApplicationController
   include PageletRails::Concerns::Controller
   
-  pagelet_options remote: true # Set default option for all actions
-  pagelet_options :show, remote: :turbolinks # set option for :show action only
+  # Set default option for all actions
+  pagelet_options remote: true 
+  
+  # set option for :show and :edit actions only
+  pagelet_options :show, :edit, remote: :turbolinks 
   
   def show
   end
   
   def new
+  end
+  
+  def edit
   end
   
 end
@@ -197,7 +203,63 @@ end
 
 # Pagelet cache
 
-TODO
+Cache of pagelet rails is built on top of [actionpack-action_caching gem](https://github.com/rails/actionpack-action_caching). 
+
+Simple example
+
+```ruby
+# app/pagelets/current_time/current_time_controller.rb
+class CurrentTime::CurrentTimeController < ::ApplicationController
+  include PageletRails::Concerns::Controller
+  
+  pagelet_options expires_in: 10.minutes
+
+  def show
+  end
+
+end
+```
+
+## cache_path
+
+Is a hash of additional parameters for cache key. 
+
+* `Hash` - static hash
+* `Proc` - dynamic params, it must return hash. Eg. `Proc.new { params.permit(:sort_by) }`
+* `Lambda` - same as `Proc` but accepts `controller` as first argument 
+
+## expires_in
+
+Set the cache expiry. For example `expires_in: 1.hour`. 
+
+Warning: if `expires_in` is missing, it will be cached indefinitely.
+
+## cache
+
+This is toggle to enable caching without specifying options. `cache_defaults` options will be used (see below).
+
+If any of `cache_path`, `expires_in` and `cache` is present then cache will be enabled.
+
+
+## cache_defaults
+
+You can set default options for caching.
+
+```ruby
+class PageletController < ::ApplicationController
+  include PageletRails::Concerns::Controller
+
+  pagelet_options cache_defaults: {
+    expires_in: 5.minutes,
+    cache_path: Proc.new {
+      { user_id: current_user.id }
+    }
+  }
+end
+```
+
+In the example above cache will be scoped per `user_id` and for 5 minutes unless it is overwritten in pagelet itself.
+
 
 # Advanced functionality
 

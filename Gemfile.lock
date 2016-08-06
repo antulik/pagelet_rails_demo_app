@@ -64,6 +64,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    colorize (0.8.1)
     concurrent-ruby (1.0.2)
     debug_inspector (0.0.2)
     ejs (1.1.1)
@@ -114,6 +115,9 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    pry-stack_explorer (0.4.9.2)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     rack (2.0.1)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -199,6 +203,7 @@ DEPENDENCIES
   bootstrap_form
   byebug
   coffee-rails (~> 4.2)
+  colorize
   ejs
   jbuilder (~> 2.5)
   jquery-rails
@@ -208,6 +213,7 @@ DEPENDENCIES
   passenger
   pg
   pry-rails
+  pry-stack_explorer
   rails (~> 5.0.0)
   rails-assets-bootstrap (= 3.3.6)!
   rails-assets-jquery.transit!

@@ -5,6 +5,8 @@ module PageletRails::Concerns::Controller
     include PageletRails::Concerns::Routes
     include PageletRails::Concerns::Options
     # include PageletRails::Concerns::Cache
+    # include PageletRails::Concerns::CacheOne
+    include PageletRails::Concerns::CacheTwo
 
     self.view_paths.unshift 'app/pagelets/'
 
@@ -17,7 +19,6 @@ module PageletRails::Concerns::Controller
 
     layout :layout_name
 
-    helper_method :pagelet_embedded?
     helper_method :pagelet_request?
 
     pagelet_options layout: 'panel'
@@ -31,10 +32,6 @@ module PageletRails::Concerns::Controller
 
   def pagelet_request?
     request.headers['X-Pagelet'].present? || params[:target_container]
-  end
-
-  def pagelet_embedded?
-    !!pagelet_options.embedded
   end
 
   private
@@ -55,43 +52,29 @@ module PageletRails::Concerns::Controller
     EOS
   end
 
-  # def pagelet_render *args
-  #   opts = args.extract_options!
-  #   opts[:layout] ||= layout_name
-  #
-  #   respond_to do |format|
-  #     format.js {
-  #       # binding.pry
-  #       # if request.headers['X-Pagelet']
-  #       #   render *args, opts
-  #       # else
-  #         render js: render_to_element_js("##{params[:target_container]}", *args, opts)
-  #       # end
-  #     }
-  #     format.html {
-  #       render *args, opts
-  #     }
-  #   end
-  # end
+  def process_action *args
+    super.tap do
+      if params[:target_container] &&
+        action_has_layout? &&
+        request.format.js? && self.response_body.first[0] == '<'
 
-  def send_action *args
-    super
+        response.content_type = 'text/javascript'
 
-    if params[:target_container] &&
-      request.format.js? && self.response_body.first[0] == '<'
+        html = self.response_body.reduce('') { |memo, body|
+          memo << body
+          memo
+        }
 
-      response.content_type = 'text/javascript'
-
-      self.response_body.map! do |html|
         js = ActionController::Base.helpers.escape_javascript html
 
-        <<-EOS.html_safe
-          $('##{params[:target_container]}').html('#{js}');
-          $(document).trigger('pagelet-loaded');
+        html = <<-EOS.html_safe
+        $('##{params[:target_container]}').html('#{js}');
+        $(document).trigger('pagelet-loaded');
         EOS
+
+        self.response_body = [html]
       end
     end
-
   end
 
 end

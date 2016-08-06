@@ -29,7 +29,7 @@ module PageletRails::Concerns::Cache
             current_user_id: current_user.id,
             current_user_class: current_user.class.name
           )
-          opts.except! '_pjax', 'original_pagelet_options'
+          opts.except! 'original_pagelet_options'
         else
           opts = {}
         end

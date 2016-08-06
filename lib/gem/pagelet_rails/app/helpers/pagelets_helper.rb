@@ -53,7 +53,6 @@ module PageletsHelper
 
       pagelet_options = opts.deep_merge(
         parent_params: params.to_h,
-        embedded: true
       )
 
       PageletHookModule.apply_hook c, action
@@ -77,6 +76,8 @@ module PageletsHelper
   # This is hack to simulate before_action.
   # For some reasons rendering in before_action is 8 times slower
   # than in action itself, so this is hack to do that.
+  #
+  # it will be called after before_hooks and before action
   module PageletHookModule
     def self.apply_hook controller_instance, action
       define_action_method_if_missing action
@@ -114,11 +115,10 @@ module PageletsHelper
 
       pagelet_options html: { 'data-widget-url' => url_for(data) }
 
-      if pagelet_options.loading_placeholder
-        instance_exec &pagelet_options.loading_placeholder
-      else
-        render 'layouts/pagelets/loading_placeholder', layout: layout_name
-      end
+      default_view = 'layouts/pagelets/loading_placeholder'
+      view = pagelet_options.placeholder.try(:[], :view).presence || default_view
+
+      render view
     end
 
   end
