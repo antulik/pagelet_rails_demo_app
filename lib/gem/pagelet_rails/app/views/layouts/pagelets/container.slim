@@ -1,19 +1,20 @@
-ruby:
-  html_opts = pagelet_options.html || {}
-  classes = html_opts.fetch(:class, '').split(' ')
-  classes << "pagelet-#{controller_name}"
-  classes << "pagelet-#{controller_name}-#{action_name}"
-
-  html_opts[:id] ||= "pagelet_#{rand(2**60).to_s(36)}"
-  html_opts[:class] = classes.join(' ')
-
-  html_opts['data-pagelet-container'] = true
-
-  encode_data = pagelet_options.original_options.to_h.except('remote')
-  html_opts['data-pagelet-options'] = PageletRails::Encryptor.encode(encode_data)
-
 - if pagelet_request?
   = content_for?(:content) ? yield(:content) : yield
+
 - else
+  ruby:
+    html_opts = pagelet_options.html || {}
+    classes = html_opts.fetch(:class, '').split(' ')
+    classes << "pagelet-#{controller_name}"
+    classes << "pagelet-#{controller_name}-#{action_name}"
+
+    html_opts[:id] ||= "pagelet_#{rand(2**60).to_s(36)}"
+    html_opts[:class] = classes.join(' ')
+
+    html_opts['data-pagelet-container'] = true
+
+    encode_data = pagelet_options.original_options.to_h.except('remote')
+    html_opts['data-pagelet-options'] = PageletRails::Encryptor.encode(encode_data)
+
   div *html_opts
     = content_for?(:content) ? yield(:content) : yield
