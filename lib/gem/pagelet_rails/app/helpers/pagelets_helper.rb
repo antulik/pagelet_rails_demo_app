@@ -110,7 +110,7 @@ module PageletsHelper
 
       pagelet_options html: { 'data-widget-url' => url_for(data) }
 
-      default_view = 'layouts/pagelets/loading_placeholder'
+      default_view = '/layouts/pagelet_rails/loading_placeholder'
       view = pagelet_options.placeholder.try(:[], :view).presence || default_view
 
       render view

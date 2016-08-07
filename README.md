@@ -297,7 +297,7 @@ This will partially update the page and replace only that pagelet.
 
 ## Super smart caching
 
-The probably one of the coolest functionality of pagelet_rails is "super smart caching". It allows you to render pagelets through ajax and cache them, but if page is reloaded the pagelet is rendered instantly from cache.
+Probably one of the coolest functionality of pagelet_rails is "super smart caching". It allows you to render pagelets through ajax and cache them, but if page is reloaded the pagelet is rendered instantly from cache.
  
  So on the first page load user sees "Loading..." blocks, but after the content is instant.
 
@@ -312,5 +312,6 @@ The best thing, it's enabled by default if pagelet has caching enabled and is re
   * goal is to serve the page with placeholders but hold connection and render pagelets in the same request before `</body>` tag
 * ~~partial updates~~
 * ~~turbolinks support~~
+* ~~smart caching~~
 * delay load of not visible pagelets (aka. below the fold)
   * do not load pagelets which are not visible to the user until user scrolls down. For example like Youtube comments.

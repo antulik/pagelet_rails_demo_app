@@ -153,6 +153,7 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    ruby-prof (0.15.9)
     sass (3.4.22)
     sass-rails (5.0.5)
       railties (>= 4.0.0, < 6)
@@ -217,6 +218,7 @@ DEPENDENCIES
   rails (~> 5.0.0)
   rails-assets-bootstrap (= 3.3.6)!
   rails-assets-jquery.transit!
+  ruby-prof
   sass-rails (~> 5.0)
   slim
   spring

@@ -13,8 +13,11 @@ module PageletRails::Concerns::Controller
     prepend_before_action :check_parent_params
 
     before_action do
-      lookup_context.prefixes.clear
+      # lookup_context.prefixes.clear
       lookup_context.prefixes.unshift "#{controller_name}/views"
+
+      # https://github.com/rails/actionpack-action_caching/issues/32
+      lookup_context.formats.unshift :html
     end
 
     layout :layout_name
@@ -56,7 +59,7 @@ module PageletRails::Concerns::Controller
     super.tap do
       if params[:target_container] &&
         action_has_layout? &&
-        request.format.js? && self.response_body.first[0] == '<'
+        request.format.js? #&& self.response_body.first[0] == '<'
 
         response.content_type = 'text/javascript'
 
