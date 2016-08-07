@@ -7,7 +7,7 @@ This is example project of using pagelets in Rails
 # Why?
 
 * Do you have pages which show a lot of information at once? 
-* The pages where you need to get data from 5 or 10 different sources? 
+* The pages where you need to get data from 5 or 10 different sources? or 50?
 * What if one of them is slow?
 * Does this mean your users have to wait?
 
@@ -27,6 +27,7 @@ Originally I saw such solution implemented at Facebook and Linkedin. Each page c
 
 * [BigPipe: Pipelining web pages for high performance](https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919/)
 * [Engineering the New LinkedIn Profile](https://engineering.linkedin.com/profile/engineering-new-linkedin-profile)
+* [Play Framework & SF Scala: Jim Brikman, Composable Applications in Play, 7/23/14](https://www.youtube.com/watch?v=4b1XLka0UIw)
 
 # What is Pagelet?
 
