@@ -98,17 +98,12 @@ module PageletsHelper
     end
 
     def render_remote_load
-      case pagelet_options.remote
-      when :turbolinks
-        # render now if request coming from turbolinks
-        is_turbolinks_request = !!request.headers['Turbolinks-Referrer']
-        return if is_turbolinks_request
-      when true
-        # keep going and render placeholder
-      else
-        # render now
-        return
+      render_remotely = pagelet_render_remotely?
+      if render_remotely && pagelet_options.has_cache
+        render_remotely = false
       end
+
+      return unless render_remotely
 
       data = params.deep_dup
       data.permit!

@@ -12,8 +12,6 @@ ruby:
   encode_data = pagelet_options.original_options.to_h.except('remote')
   html_opts['data-pagelet-options'] = PageletRails::Encryptor.encode(encode_data)
 
-  html_opts['data-pjax'] = pagelet_options.pjax if pagelet_options.pjax
-
 - if pagelet_request?
   = content_for?(:content) ? yield(:content) : yield
 - else

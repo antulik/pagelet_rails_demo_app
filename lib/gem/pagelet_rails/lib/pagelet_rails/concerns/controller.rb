@@ -77,4 +77,19 @@ module PageletRails::Concerns::Controller
     end
   end
 
+  def pagelet_render_remotely?
+    case pagelet_options.remote
+    when :turbolinks
+      # render now if request coming from turbolinks
+      is_turbolinks_request = !!request.headers['Turbolinks-Referrer']
+      render_remotely = !is_turbolinks_request
+    when true
+      render_remotely = true
+    else
+      render_remotely = false
+    end
+
+    render_remotely
+  end
+
 end

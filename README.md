@@ -294,6 +294,14 @@ end
 ``` 
 
 This will partially update the page and replace only that pagelet.
+
+## Super smart caching
+
+The probably one of the coolest functionality of pagelet_rails is "super smart caching". It allows you to render pagelets through ajax and cache them, but if page is reloaded the pagelet is rendered instantly from cache.
+ 
+ So on the first page load user sees "Loading..." blocks, but after the content is instant.
+
+The best thing, it's enabled by default if pagelet has caching enabled and is rendering through ajax request.
  
 # Todo
 

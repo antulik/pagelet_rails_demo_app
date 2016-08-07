@@ -1,12 +1,59 @@
 .row
-  .col-lg-4
+  .col-sm-12
+    h3 No cache
+.row
+  .col-sm-4
     = pagelet :pagelets_home_block, params: {id: 'remote_false'},
-      remote: false
+      remote: false,
+      text: 'This is always rendered inline'
 
-  .col-lg-4
+  .col-sm-4
     = pagelet :pagelets_home_block, params: {id: 'remote_turbolinks'},
-      remote: :turbolinks
+      remote: :turbolinks,
+      text: 'This is loaded remotely on the initial request but instantly with turbolinks'
 
-  .col-lg-4
+  .col-sm-4
     = pagelet :pagelets_home_block, params: {id: 'remote_true'},
-      remote: true
+      remote: true,
+      text: 'This is always loaded remotely'
+
+
+.row
+  .col-sm-12
+    h3 Cache 10 seconds
+
+.row
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_false', group: 'a'}, remote: false,
+      expires_in: 10.seconds,
+      text: 'Always inline'
+
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_turbolinks', group: 'a'}, remote: :turbolinks,
+      expires_in: 10.seconds,
+      text: 'Remotely unless turbolinks or cached'
+
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_true', group: 'a'}, remote: true,
+      expires_in: 10.seconds,
+      text: 'Remotely unless cached'
+
+.row
+  .col-sm-12
+    h3 Cache 30 seconds
+
+.row
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_false', group: 'b'}, remote: false,
+      expires_in: 30.seconds,
+      text: 'Always inline'
+
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_turbolinks', group: 'b'}, remote: :turbolinks,
+      expires_in: 30.seconds,
+      text: 'Remotely unless turbolinks or cached'
+
+  .col-sm-4
+    = pagelet :pagelets_home_block, params: {id: 'remote_true', group: 'b'}, remote: true,
+      expires_in: 30.seconds,
+      text: 'Remotely unless cached'

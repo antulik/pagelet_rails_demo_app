@@ -15,8 +15,6 @@ module PageletRails::Concerns::CacheTwo
   def pagelet_cache &block
     cache_enabled = pagelet_options.cache || pagelet_options.cache_path || pagelet_options.expires_in
 
-    cache_enabled = false if pagelet_options.remote
-
     if !cache_enabled
       return yield
     end
@@ -27,15 +25,40 @@ module PageletRails::Concerns::CacheTwo
 
     cache_path = pagelet_options.cache_path || cache_defaults[:cache_path]
 
-    cache_options = {
-      layout: false,
-      store_options: store_options,
-      cache_path: cache_path
-    }
+    cache_path = if cache_path.is_a?(Proc)
+      self.instance_exec(self, &cache_path)
+    elsif cache_path.respond_to?(:call)
+      cache_path.call(self)
+    elsif cache_path.is_a?(String)
+      {
+        custom: cache_path
+      }
+    else
+      cache_path
+    end
+    cache_path ||= {}
+    cache_path[:controller] = params[:controller]
+    cache_path[:action] = params[:action]
 
-    filter = ActionController::Caching::Actions::ActionCacheFilter.new(cache_options)
+    path_object = ActionController::Caching::Actions::ActionCachePath.new(self, cache_path)
+    has_cache = fragment_exist?(path_object.path, store_options)
+    pagelet_options has_cache: has_cache
 
-    filter.around(self, &block)
+
+    if (pagelet_render_remotely? && has_cache) || !pagelet_render_remotely?
+      cache_options = {
+        layout: false,
+        store_options: store_options,
+        cache_path: cache_path
+      }
+
+      filter = ActionController::Caching::Actions::ActionCacheFilter.new(cache_options)
+
+      filter.around(self, &block)
+
+    else
+      yield
+    end
   end
 
 end
