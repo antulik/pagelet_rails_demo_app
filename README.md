@@ -6,8 +6,8 @@ This is example project of using pagelets in Rails
 
 # Why?
 
-* Do you have pages which show a lot of information at once? 
-* The pages where you need to get data from 5 or 10 different sources? or 50?
+* Do you have pages with a lot of information? 
+* The pages where you need to get data from 5 or 10 different sources?
 * What if one of them is slow?
 * Does this mean your users have to wait?
 
