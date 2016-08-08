@@ -20,9 +20,8 @@ gem 'pagelet_rails', path: 'lib/gem'
 gem 'bootstrap_form'
 
 # Use Puma as the app server
-# gem 'puma', '~> 3.0'
-
-gem "passenger"
+gem 'puma', '~> 3.0'
+# gem "passenger"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

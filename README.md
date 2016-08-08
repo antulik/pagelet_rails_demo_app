@@ -95,6 +95,7 @@ Options for `remote`:
 * `true` - always render pagelet through ajax
 * `:turbolinks`  - render pagelet throught ajax, but inline if it's a turbolinks page visit
 * `false` or missing - render inline
+* `stream` - (aka BigPipe) render placeholder and render full version at the end of html. See streaming for more info.
 
 ## params
 
@@ -227,7 +228,8 @@ Is a hash of additional parameters for cache key.
 
 * `Hash` - static hash
 * `Proc` - dynamic params, it must return hash. Eg. `Proc.new { params.permit(:sort_by) }`
-* `Lambda` - same as `Proc` but accepts `controller` as first argument 
+* `Lambda` - same as `Proc` but accepts `controller` as first argument
+* `String` - any custom identifier
 
 ## expires_in
 
@@ -296,6 +298,44 @@ end
 
 This will partially update the page and replace only that pagelet.
 
+
+## Streaming
+
+This is the most efficient way to deliver data with minimum delays. The placeholder will be rendered first and the full version will be delivered at the end of page and replaced with Javascript code. Everything is delivered in the same request.
+
+This mode requires rendering of templates with streaming mode enabled.
+
+```ruby
+  #...
+  def show
+    render :show, stream: true
+  end
+  #...  
+```
+
+In you layout add `pagelet_stream` right before `</body>` tag.
+
+```erb
+<!-- app/views/layouts/application.erb -->
+
+<body>
+<%= yield %>
+
+<% pagelet_stream %>
+</body>
+```
+
+Usage: 
+
+```erb
+<%= pagelet :pagelets_current_time, remote: :stream %>
+```
+
+**Warning!!!** You also should have webserver compatible for streaming like puma, passenger or unicorn (requires special config).
+ 
+Finally if everything is done right you should see significant rendering speed improvements especially on old browsers, slow network or with cold cache. 
+
+
 ## Super smart caching
 
 Probably one of the coolest functionality of pagelet_rails is "super smart caching". It allows you to render pagelets through ajax and cache them, but if page is reloaded the pagelet is rendered instantly from cache.
@@ -309,10 +349,12 @@ The best thing, it's enabled by default if pagelet has caching enabled and is re
 * package as gem
 * batch request
   * each pagelet makes a separate http call, it's very inefficient for pages with many pagelets. Goal is to group multiple pagelets into single http request. 
-* streaming of components at the end of body
-  * goal is to serve the page with placeholders but hold connection and render pagelets in the same request before `</body>` tag
+* assets support
+* ~~streaming of components at the end of body~~
+  * ~~goal is to serve the page with placeholders but hold connection and render pagelets in the same request before `</body>` tag~~
 * ~~partial updates~~
 * ~~turbolinks support~~
 * ~~smart caching~~
 * delay load of not visible pagelets (aka. below the fold)
   * do not load pagelets which are not visible to the user until user scrolls down. For example like Youtube comments.
+* fix streaming with nested layouts (rails bug?)

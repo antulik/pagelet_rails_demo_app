@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'tabs#show', id: 'about'
   resources :tabs
 
+  resource :streaming, controller: 'streaming'
 
 
 end

@@ -5,7 +5,7 @@ class CurrentTime::CurrentTimeController < ::PageletController
   pagelet_options placeholder: {height: 131}
 
   def show
-
+    # sleep 2
   end
 end
 

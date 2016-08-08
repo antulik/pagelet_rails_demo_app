@@ -21,13 +21,36 @@ module PageletsHelper
     result
   end
 
+  def pagelet_stream
+    return nil if pagelet_stream_objects.empty?
+    pagelet_stream_objects.each do |key, block|
+      concat content_tag('script', raw("pagelet_place_into_container('#{key}', '#{j capture(&block)}');\n"), type: 'text/javascript')
+    end
+    nil
+  end
+
+  def pagelet_default_id
+    "pagelet_#{rand(2**60).to_s(36)}"
+  end
+
+  def add_pagelet_stream key, &block
+    objects = pagelet_stream_objects
+    raise "duplicate key: #{key}" if objects.has_key?(key)
+    objects[key] = block
+    request.instance_variable_set(:@pagelet_stream_objects, objects)
+  end
+
+  def pagelet_stream_objects
+    request.instance_variable_get(:@pagelet_stream_objects) || {}
+  end
+
   def pagelet *args
-    opts = args.extract_options!
+    pagelet_options = args.extract_options!
 
     silence_log "Pagelet rendered #{args}" do
       controller = nil
       action = nil
-      pagelet_params = opts.delete(:params) { {} }.with_indifferent_access
+      pagelet_params = pagelet_options.delete(:params) { {} }.with_indifferent_access
 
       case args.size
       when 1
@@ -45,13 +68,22 @@ module PageletsHelper
         controller = "Pagelets::#{name.to_s.camelize}::#{name.to_s.camelize}Controller".constantize
       end
 
-      c = controller.new
+      if pagelet_options[:remote] == :stream
+        id = pagelet_options.dig(:html, :id) || pagelet_default_id
+        pagelet_options.deep_merge! html: { id: id }
 
+        add_pagelet_stream id, &Proc.new {
+          puts pagelet_options.inspect.red
+          pagelet *args, pagelet_options.merge(remote: false, skip_container: true)
+        }
+      end
+
+      c = controller.new
 
       pagelet_params.reverse_merge!(params.except(:controller, :action))
         .merge!(controller: c.controller_path, action: action)
 
-      pagelet_options = opts.deep_merge(
+      pagelet_options = pagelet_options.deep_merge(
         parent_params: params.to_h,
       )
 
@@ -108,7 +140,9 @@ module PageletsHelper
       data = params.deep_dup
       data.permit!
 
-      pagelet_options html: { 'data-widget-url' => url_for(data) }
+      if pagelet_options.remote != :stream
+        pagelet_options html: { 'data-widget-url' => url_for(data) }
+      end
 
       default_view = '/layouts/pagelet_rails/loading_placeholder'
       view = pagelet_options.placeholder.try(:[], :view).presence || default_view

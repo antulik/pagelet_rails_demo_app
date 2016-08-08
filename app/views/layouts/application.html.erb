@@ -1,4 +1,21 @@
-<% content_for :root_content do %>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <title>Rails5</title>
+  <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body>
+
+<div class="container">
 
   <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -22,18 +39,15 @@
           <%= li_menu 'Comments example', tab_path('comments') %>
 
         </ul>
-        <!--<ul class="nav navbar-nav navbar-right">-->
-          <!--<li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>-->
-          <!--<li><a href="../navbar-static-top/">Static top</a></li>-->
-          <!--<li><a href="../navbar-fixed-top/">Fixed top</a></li>-->
-        <!--</ul>-->
-      </div><!--/.nav-collapse -->
-    </div><!--/.container-fluid -->
+      </div>
+    </div>
   </nav>
 
-  <%= content_for?(:application_content) ? yield(:application_content) : yield %>
+  <%= yield %>
 
-<% end %>
+</div>
 
-<%= render template: 'layouts/root' %>
+<% pagelet_stream %>
 
+</body>
+</html>

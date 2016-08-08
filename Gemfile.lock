@@ -104,9 +104,6 @@ GEM
       pkg-config (~> 1.1.7)
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
-    passenger (5.0.30)
-      rack
-      rake (>= 0.8.1)
     pg (0.18.4)
     pkg-config (1.1.7)
     pry (0.10.4)
@@ -118,6 +115,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    puma (3.5.2)
     rack (2.0.1)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -211,10 +209,10 @@ DEPENDENCIES
   listen (~> 3.0.5)
   octokit (~> 4.0)
   pagelet_rails!
-  passenger
   pg
   pry-rails
   pry-stack_explorer
+  puma (~> 3.0)
   rails (~> 5.0.0)
   rails-assets-bootstrap (= 3.3.6)!
   rails-assets-jquery.transit!
