@@ -8,16 +8,22 @@ module PageletRails::Concerns::Controller
     # include PageletRails::Concerns::CacheOne
     include PageletRails::Concerns::CacheTwo
 
-    self.view_paths.unshift 'app/pagelets/'
-
     prepend_before_action :check_parent_params
 
     before_action do
+      self.view_paths.unshift 'app/pagelets/'
+
       # lookup_context.prefixes.clear
-      lookup_context.prefixes.unshift "#{controller_name}/views"
+      view = "#{controller_name}/views"
+      if lookup_context.prefixes.exclude?(view)
+        lookup_context.prefixes.unshift "#{controller_name}/views"
+      end
+
 
       # https://github.com/rails/actionpack-action_caching/issues/32
-      lookup_context.formats.unshift :html
+      if lookup_context.formats.exclude?(:html)
+        lookup_context.formats.unshift :html
+      end
     end
 
     layout :layout_name
@@ -46,15 +52,6 @@ module PageletRails::Concerns::Controller
     end
   end
 
-  def render_to_element_js element_selector, *args
-    html = render_to_string *args
-    js = ActionController::Base.helpers.escape_javascript html
-    <<-EOS.html_safe
-      $('#{element_selector}').html('#{js}');
-      $(document).trigger('pagelet-loaded');
-    EOS
-  end
-
   def process_action *args
     super.tap do
       if params[:target_container] &&
@@ -68,12 +65,12 @@ module PageletRails::Concerns::Controller
           memo
         }
 
+        id = ActionController::Base.helpers.escape_javascript params[:target_container]
         js = ActionController::Base.helpers.escape_javascript html
 
-        html = <<-EOS.html_safe
-        $('##{params[:target_container]}').html('#{js}');
-        $(document).trigger('pagelet-loaded');
-        EOS
+        html = ActionController::Base.helpers.raw(
+          "pagelet_place_into_container('#{id}', '#{js}');"
+        )
 
         self.response_body = [html]
       end

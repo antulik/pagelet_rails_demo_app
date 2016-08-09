@@ -7,6 +7,6 @@ class HomeBlocks::HomeBlocksController < ::PageletController
   }
 
   def show
-    render params[:id]
+    render params.require(:id)
   end
 end

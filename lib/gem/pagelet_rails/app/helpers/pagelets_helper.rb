@@ -5,7 +5,7 @@ module PageletsHelper
 
     result = nil
     ms = nil
-    capture(:stdout) do
+    ActionController::Base.helpers.capture(:stdout) do
       ms = Benchmark.ms do
         result = yield
       end
@@ -44,65 +44,60 @@ module PageletsHelper
     request.instance_variable_get(:@pagelet_stream_objects) || {}
   end
 
-  def pagelet *args
-    pagelet_options = args.extract_options!
+  def pagelet path, p_options = {}
+    puts "Rendering pagelet #{path}".blue
 
-    silence_log "Pagelet rendered #{args}" do
-      controller = nil
-      action = nil
-      pagelet_params = pagelet_options.delete(:params) { {} }.with_indifferent_access
+    p_params = p_options.delete(:params) { {} }.with_indifferent_access
 
-      case args.size
-      when 1
-        path = args[0]
-        if path.is_a? Symbol
-          path = self.send("#{path}_path", pagelet_params)
-        end
-
-        path_opts = Rails.application.routes.recognize_path(path)
-        controller = path_opts[:controller].camelize.concat('Controller').constantize
-        action = path_opts[:action]
-
-      when 2
-        name, action = *args
-        controller = "Pagelets::#{name.to_s.camelize}::#{name.to_s.camelize}Controller".constantize
-      end
-
-      if pagelet_options[:remote] == :stream
-        id = pagelet_options.dig(:html, :id) || pagelet_default_id
-        pagelet_options.deep_merge! html: { id: id }
-
-        add_pagelet_stream id, &Proc.new {
-          puts pagelet_options.inspect.red
-          pagelet *args, pagelet_options.merge(remote: false, skip_container: true)
-        }
-      end
-
-      c = controller.new
-
-      pagelet_params.reverse_merge!(params.except(:controller, :action))
-        .merge!(controller: c.controller_path, action: action)
-
-      pagelet_options = pagelet_options.deep_merge(
-        parent_params: params.to_h,
-      )
-
-      PageletHookModule.apply_hook c, action
-
-      c.pagelet_options pagelet_options
-      c.pagelet_options original_options: pagelet_options
-      # c.params = pagelet_params
-
-      env = request.env.deep_dup
-      pagelet_request = ActionDispatch::Request.new(env)
-      pagelet_request.parameters.merge! pagelet_params
-
-      pagelet_response        = controller.make_response! pagelet_request
-      c.dispatch(action, pagelet_request, pagelet_response)
-
-      body = c.response.body
-      body.html_safe
+    if path.is_a? Symbol
+      path = self.send("#{path}_path", p_params)
+    else
+      uri = URI(path)
+      p_params.merge! Rack::Utils.parse_nested_query(uri.query)
+      p_options.merge! remote: false
     end
+
+    path_opts = Rails.application.routes.recognize_path(path)
+    p_params.reverse_merge!(path_opts)
+
+    controller_class = path_opts[:controller].camelize.concat('Controller').constantize
+    action = path_opts[:action]
+
+
+    if p_options[:remote] == :stream
+      html_id = p_options.dig(:html, :id) || pagelet_default_id
+      p_options.deep_merge! html: { id: html_id }
+
+      add_pagelet_stream html_id, &Proc.new {
+        pagelet path, p_options.merge(remote: false, skip_container: true)
+      }
+    end
+
+    p_options.deep_merge! parent_params: params.to_h
+
+    c = controller_class.new
+    PageletHookModule.apply_hook c, action
+    c.pagelet_options p_options
+    c.pagelet_options original_options: p_options
+
+
+    env = Rack::MockRequest.env_for(path,
+      'HTTP_HOST'                => request.env['HTTP_HOST'],
+      'REMOTE_ADDR'              => request.env['REMOTE_ADDR'],
+      'HTTP_USER_AGENT'          => request.env['HTTP_USER_AGENT'],
+      'HTTP_X_CSRF_TOKEN'        => request.env['HTTP_X_CSRF_TOKEN'],
+      'HTTP_X_REQUESTED_WITH'    => "XMLHttpRequest",
+    )
+
+    p_request = ActionDispatch::Request.new(env)
+    p_request.parameters.clear
+    p_request.parameters.merge! p_params
+
+    p_response = controller_class.make_response! p_request
+    c.dispatch(action, p_request, p_response)
+
+    body = c.response.body
+    body.html_safe
   end
 
   # This is hack to simulate before_action.

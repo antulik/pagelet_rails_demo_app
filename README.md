@@ -95,7 +95,7 @@ Options for `remote`:
 * `true` - always render pagelet through ajax
 * `:turbolinks`  - render pagelet throught ajax, but inline if it's a turbolinks page visit
 * `false` or missing - render inline
-* `stream` - (aka BigPipe) render placeholder and render full version at the end of html. See streaming for more info.
+* `:stream` - (aka BigPipe) render placeholder and render full version at the end of html. See streaming for more info.
 
 ## params
 
@@ -347,9 +347,9 @@ The best thing, it's enabled by default if pagelet has caching enabled and is re
 # Todo
 
 * package as gem
-* batch request
-  * each pagelet makes a separate http call, it's very inefficient for pages with many pagelets. Goal is to group multiple pagelets into single http request. 
 * assets support
+* ~~batch request~~
+  * ~~each pagelet makes a separate http call, it's very inefficient for pages with many pagelets. Goal is to group multiple pagelets into single http request.~~ 
 * ~~streaming of components at the end of body~~
   * ~~goal is to serve the page with placeholders but hold connection and render pagelets in the same request before `</body>` tag~~
 * ~~partial updates~~
