@@ -38,22 +38,32 @@ The closest alternative in ruby is [cells gem](https://github.com/apotonick/cell
 Pagelet_rails is built on top of Rails and uses it as much as possible. The main philosophy: **Do not reinvent the wheel, build on shoulders of giants.**
  
 
- 
+
 # Usage
- 
+
+### Structure
+
+```
+app
+├── pagelets
+│   ├── current_time
+│   │   ├── current_time_controller.rb
+│   │   ├── views
+│   │   │   ├── show.erb
+```
+
+
 ```ruby
 # app/pagelets/current_time/current_time_controller.rb
-class CurrentTime::CurrentTimeController < ::ApplicationController
-  # Extend your normal Rails controller
+class CurrentTime::CurrentTimeController < ApplicationController
   include PageletRails::Concerns::Controller  
   
-  # `pagelet_resource` is shortcut for inline route `resource`
+  # add pagelets_current_time_path route
+  # which gives "/pagelets/current_time" url route
   pagelet_resource only: [:show] 
 
   def show
-    # Normal Rails action
   end
-
 end
 ``` 
 
@@ -80,7 +90,7 @@ And now use it anywhere in your view
  
 # Pagelet helper
 
-`pagelet` helper allows you to render pagelets in views. Name of pagelet is his path. 
+`pagelet` helper allows you to render pagelets in views. Name of pagelet is its path. 
 
 For example pagelet with route `pagelets_current_time_path` will have `pagelets_current_time` name.
 
@@ -104,7 +114,7 @@ Example
 <%= pagelet :pagelets_current_time, params: { id: 123 } %>
 ```
 
-`params` are the parameters to pass to pagelet url. Same as `pagelets_current_time_path(id: 123)`
+`params` are the parameters to pass to pagelet path. Same as `pagelets_current_time_path(id: 123)`
 
 ## html
 
@@ -112,7 +122,7 @@ Example
 <%= pagelet :pagelets_current_time, html: { class: 'panel' } %>
 ```
 
-pass html attributes to pagelet
+You can specify html attributes to pagelet with `html` option
 
 ## placeholder
 
@@ -303,7 +313,7 @@ This will partially update the page and replace only that pagelet.
 
 This is the most efficient way to deliver data with minimum delays. The placeholder will be rendered first and the full version will be delivered at the end of page and replaced with Javascript code. Everything is delivered in the same request.
 
-This mode requires rendering of templates with streaming mode enabled.
+This mode requires rendering of templates with [streaming mode](http://api.rubyonrails.org/classes/ActionController/Streaming.html) enabled.
 
 ```ruby
   #...
