@@ -52,6 +52,7 @@ app
 │   │   │   ├── show.erb
 ```
 
+### Example
 
 ```ruby
 # app/pagelets/current_time/current_time_controller.rb
