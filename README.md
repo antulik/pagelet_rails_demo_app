@@ -41,7 +41,7 @@ Pagelet_rails is built on top of Rails and uses it as much as possible. The main
 
 # Usage
 
-### Structure
+## Structure
 
 ```
 app
@@ -52,7 +52,7 @@ app
 │   │   │   ├── show.erb
 ```
 
-### Example
+## Example
 
 ```ruby
 # app/pagelets/current_time/current_time_controller.rb
@@ -89,13 +89,13 @@ And now use it anywhere in your view
 <%= pagelet :pagelets_current_time %>
 ```
  
-# Pagelet helper
+## Pagelet helper
 
 `pagelet` helper allows you to render pagelets in views. Name of pagelet is its path. 
 
 For example pagelet with route `pagelets_current_time_path` will have `pagelets_current_time` name.
 
-## remote
+### remote
 
 Example
 ```erb
@@ -108,7 +108,7 @@ Options for `remote`:
 * `false` or missing - render inline
 * `:stream` - (aka BigPipe) render placeholder and render full version at the end of html. See streaming for more info.
 
-## params
+### params
 
 Example
 ```erb
@@ -117,7 +117,7 @@ Example
 
 `params` are the parameters to pass to pagelet path. Same as `pagelets_current_time_path(id: 123)`
 
-## html
+### html
 
 ```erb
 <%= pagelet :pagelets_current_time, html: { class: 'panel' } %>
@@ -125,7 +125,7 @@ Example
 
 You can specify html attributes to pagelet with `html` option
 
-## placeholder
+### placeholder
 
 ```erb
 <%= pagelet :pagelets_current_time, placeholder: { text: 'Loading...', height: 300 } %>
@@ -134,7 +134,7 @@ You can specify html attributes to pagelet with `html` option
 Configuration for placeholder before pagelet is loaded.
 
 
-## other
+### other
 
 You can pass any other data and it will be available in `pagelet_options`
 
@@ -151,7 +151,7 @@ You can pass any other data and it will be available in `pagelet_options`
 ```
 
 
-# Pagelet options
+## Pagelet options
 
 `pagelet_options` is similar to `params` object, but for private data and config. Options can be global for all actions or specific actions only.
 
@@ -184,7 +184,7 @@ end
 <%= pagelet :pagelets_current_time, remote: false %> <!-- force remote: false -->
 ```
 
-# Inline routes
+## Inline routes
 
 Because pagelets are small you will have many of them. In order to keep them under control pagelet_rails provides helpers. 
 
@@ -214,7 +214,7 @@ class CurrentTime::CurrentTimeController < ::ApplicationController
 end
 ```
 
-# Pagelet cache
+## Pagelet cache
 
 Cache of pagelet rails is built on top of [actionpack-action_caching gem](https://github.com/rails/actionpack-action_caching). 
 
@@ -233,7 +233,7 @@ class CurrentTime::CurrentTimeController < ::ApplicationController
 end
 ```
 
-## cache_path
+### cache_path
 
 Is a hash of additional parameters for cache key. 
 
@@ -242,20 +242,20 @@ Is a hash of additional parameters for cache key.
 * `Lambda` - same as `Proc` but accepts `controller` as first argument
 * `String` - any custom identifier
 
-## expires_in
+### expires_in
 
 Set the cache expiry. For example `expires_in: 1.hour`. 
 
 Warning: if `expires_in` is missing, it will be cached indefinitely.
 
-## cache
+### cache
 
 This is toggle to enable caching without specifying options. `cache_defaults` options will be used (see below).
 
 If any of `cache_path`, `expires_in` and `cache` is present then cache will be enabled.
 
 
-## cache_defaults
+### cache_defaults
 
 You can set default options for caching.
 
@@ -343,6 +343,8 @@ Usage:
 ```
 
 **Warning!!!** You also should have webserver compatible for streaming like puma, passenger or unicorn (requires special config).
+
+**Warning!!!** you need to have multiple threads/processes configured in the web server. This is required so the page could fetch assets while content is streaming. 
  
 Finally if everything is done right you should see significant rendering speed improvements especially on old browsers, slow network or with cold cache. 
 
@@ -354,6 +356,18 @@ Probably one of the coolest functionality of pagelet_rails is "super smart cachi
  So on the first page load user sees "Loading..." blocks, but after the content is instant.
 
 The best thing, it's enabled by default if pagelet has caching enabled and is rendering through ajax request.
+
+## Ajax Batching
+
+Only relevant for `remote: true` and `remote: :turbolinks` when request is loaded through ajax. Loading each pagelet with a separate request is inefficient if you need to do make many requests. That's why you need to group multiple requests into one. By default all ajax requests are grouped into single request. But you can have full control of it. You can specify how to group requests with `ajax_group` option.
+
+```erb
+<%= pagelet :pagelets_current_time, remote: true, ajax_group: 'main' %>
+<%= pagelet :pagelets_current_time, remote: true, ajax_group: 'leftpanel' %>
+```
+
+There will be one request per group. Missing value is considered a separate group as well.
+
  
 # Todo
 
