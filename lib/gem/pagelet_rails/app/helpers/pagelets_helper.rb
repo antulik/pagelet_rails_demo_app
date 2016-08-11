@@ -1,26 +1,5 @@
 module PageletsHelper
 
-  def silence_log message, options = {}
-    options[:level] ||= :info
-
-    result = nil
-    ms = nil
-    ActionController::Base.helpers.capture(:stdout) do
-      ms = Benchmark.ms do
-        result = yield
-      end
-    end
-
-    if message.present?
-      Rails.logger.send(options[:level],
-        message: message,
-        duration: ms.round(2)
-      )
-    end
-
-    result
-  end
-
   def pagelet_stream
     return nil if pagelet_stream_objects.empty?
     pagelet_stream_objects.each do |key, block|
@@ -76,16 +55,16 @@ module PageletsHelper
     p_options.deep_merge! parent_params: params.to_h
 
     c = controller_class.new
-    PageletHookModule.apply_hook c, action
     c.pagelet_options p_options
     c.pagelet_options original_options: p_options
 
-
     env = Rack::MockRequest.env_for(path,
-      'HTTP_HOST'                => request.env['HTTP_HOST'],
       'REMOTE_ADDR'              => request.env['REMOTE_ADDR'],
+      'HTTP_HOST'                => request.env['HTTP_HOST'],
+      'HTTP_TURBOLINKS_REFERRER' => request.env['HTTP_TURBOLINKS_REFERRER'],
       'HTTP_USER_AGENT'          => request.env['HTTP_USER_AGENT'],
       'HTTP_X_CSRF_TOKEN'        => request.env['HTTP_X_CSRF_TOKEN'],
+      'HTTP_X_PAGELET'           => request.env['HTTP_X_PAGELET'],
       'HTTP_X_REQUESTED_WITH'    => "XMLHttpRequest",
     )
 
@@ -98,53 +77,6 @@ module PageletsHelper
 
     body = c.response.body
     body.html_safe
-  end
-
-  # This is hack to simulate before_action.
-  # For some reasons rendering in before_action is 8 times slower
-  # than in action itself, so this is hack to do that.
-  #
-  # it will be called after before_hooks and before action
-  module PageletHookModule
-    def self.apply_hook controller_instance, action
-      define_action_method_if_missing action
-      controller_instance.extend self
-    end
-
-    def self.define_action_method_if_missing action
-      return if method_defined? action
-
-      module_exec do
-        define_method(action) do
-          return super() if action_name.to_s != __callee__.to_s
-
-          render_remote_load
-          super() if !performed?
-        end
-      end
-    end
-
-    def render_remote_load
-      render_remotely = pagelet_render_remotely?
-      if render_remotely && pagelet_options.has_cache
-        render_remotely = false
-      end
-
-      return unless render_remotely
-
-      data = params.deep_dup
-      data.permit!
-
-      if pagelet_options.remote != :stream
-        pagelet_options html: { 'data-widget-url' => url_for(data) }
-      end
-
-      default_view = '/layouts/pagelet_rails/loading_placeholder'
-      view = pagelet_options.placeholder.try(:[], :view).presence || default_view
-
-      render view
-    end
-
   end
 
 end

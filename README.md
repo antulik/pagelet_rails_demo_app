@@ -89,7 +89,7 @@ And now use it anywhere in your view
 <%= pagelet :pagelets_current_time %>
 ```
  
-## Pagelet helper
+## Pagelet view helper
 
 `pagelet` helper allows you to render pagelets in views. Name of pagelet is its path. 
 

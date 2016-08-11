@@ -1,93 +1,65 @@
 module PageletRails::Concerns::Cache
   extend ActiveSupport::Concern
 
-  module ClassMethods
-    def check_cached_version(*actions)
-      return unless cache_configured?
+  included do
+    include ActionController::Caching::Actions
 
-      options = actions.extract_options!
-      options[:layout] = true unless options.key?(:layout)
-      filter_options = options.extract!(:if, :unless).merge(only: actions)
-      cache_options = options.extract!(:layout, :cache_path).merge(store_options: options)
+    pagelet_options cache_defaults: {
+      expires_in: 5.seconds,
+      cache_path: {}
+    }
 
-      before_action PageletCacheFilter.new(cache_options), filter_options
+    around_action :pagelet_cache
+  end
+
+  def pagelet_cache &block
+    # puts 'pagelet_cache'.blue
+    cache_enabled = pagelet_options.cache || pagelet_options.cache_path || pagelet_options.expires_in
+
+    if !cache_enabled
+      return yield
     end
 
-    def pagelet_cache *args, &block
-      cache_opts = args.extract_options!
+    cache_defaults = (pagelet_options.cache_defaults || {}).to_h.symbolize_keys
+    store_options = cache_defaults.except(:cache_path)
+    store_options[:expires_in] = pagelet_options.expires_in if pagelet_options.expires_in
 
-      default_cache_path = cache_opts.delete(:default_cache_path) { true }
-      raise ArgumentError if !block && !default_cache_path
+    cache_path = pagelet_options.cache_path || cache_defaults[:cache_path]
 
-      cache_path = Proc.new do
+    cache_path = if cache_path.is_a?(Proc)
+      self.instance_exec(self, &cache_path)
+    elsif cache_path.respond_to?(:call)
+      cache_path.call(self)
+    elsif cache_path.is_a?(String)
+      {
+        custom: cache_path
+      }
+    else
+      cache_path
+    end
+    cache_path ||= {}
+    cache_path[:controller] = params[:controller]
+    cache_path[:action] = params[:action]
 
-        if default_cache_path
-          opts = params.except(:controller, :action).merge(
-            controller: controller_path,
-            action: action_name,
-            subdomain: request.subdomain,
-            current_user_id: current_user.id,
-            current_user_class: current_user.class.name
-          )
-          opts.except! 'original_pagelet_options'
-        else
-          opts = {}
-        end
+    path_object = ActionController::Caching::Actions::ActionCachePath.new(self, cache_path)
+    has_cache = fragment_exist?(path_object.path, store_options)
+    pagelet_options has_cache: has_cache
 
-        if block
-          opts.merge! instance_exec(&block)
-        end
 
-        opts
-      end
+    if (pagelet_render_remotely? && has_cache) || !pagelet_render_remotely?
+      cache_options = {
+        layout: false,
+        store_options: store_options,
+        cache_path: cache_path
+      }
 
-      cache_opts.reverse_merge!(
-        expires_in: 30.minutes,
-        cache_path: cache_path,
-        layout: true
-      )
+      filter = ActionController::Caching::Actions::ActionCacheFilter.new(cache_options)
 
-      check_cached_version *(args.deep_dup), cache_opts.deep_dup
+      filter.around(self, &block)
 
-      cache_opts = cache_opts.merge(
-        if: -> { !pagelet_options.remote }
-      )
-
-      caches_action *args, cache_opts
+    else
+      yield
     end
   end
 
-  # took original code from ActionController::Caching::Actions::ActionCacheFilter
-  class PageletCacheFilter # :nodoc:
-    def initialize(options, &block)
-      @cache_path, @store_options, @cache_layout =
-        options.values_at(:cache_path, :store_options, :layout)
-    end
-
-    def before(controller)
-      return unless controller.pagelet_options.remote
-
-      cache_layout = @cache_layout.respond_to?(:call) ? @cache_layout.call(controller) : @cache_layout
-
-      path_options = if @cache_path.is_a?(Proc)
-        controller.instance_exec(controller, &@cache_path)
-      elsif @cache_path.respond_to?(:call)
-        @cache_path.call(controller)
-      else
-        @cache_path
-      end
-
-      cache_path = ActionController::Caching::Actions::ActionCachePath.new(controller, path_options || {})
-
-      body = controller.read_fragment(cache_path.path, @store_options)
-
-      if body
-        layout_opt = cache_layout ? 'layouts/pagelets/container' : true
-        body = controller.render_to_string(text: body, layout: layout_opt)
-
-        controller.response_body = body
-        controller.content_type = Mime[cache_path.extension || :html]
-      end
-    end
-  end
 end

@@ -2,29 +2,15 @@ module PageletRails::Concerns::Controller
   extend ActiveSupport::Concern
 
   included do
+    # order is important
+    include PageletRails::Concerns::ResponseWrapper
     include PageletRails::Concerns::Routes
     include PageletRails::Concerns::Options
-    # include PageletRails::Concerns::Cache
-    # include PageletRails::Concerns::CacheOne
-    include PageletRails::Concerns::CacheTwo
+    include PageletRails::Concerns::Cache
+    include PageletRails::Concerns::Placeholder
 
-    prepend_before_action :check_parent_params
-
-    before_action do
-      self.view_paths.unshift 'app/pagelets/'
-
-      # lookup_context.prefixes.clear
-      view = "#{controller_name}/views"
-      if lookup_context.prefixes.exclude?(view)
-        lookup_context.prefixes.unshift "#{controller_name}/views"
-      end
-
-
-      # https://github.com/rails/actionpack-action_caching/issues/32
-      if lookup_context.formats.exclude?(:html)
-        lookup_context.formats.unshift :html
-      end
-    end
+    prepend_before_action :merge_original_pagelet_options
+    prepend_before_action :append_pagelet_view_paths
 
     layout :layout_name
 
@@ -45,35 +31,25 @@ module PageletRails::Concerns::Controller
 
   private
 
-  def check_parent_params
-    if params[:original_pagelet_options]
-      opts = PageletRails::Encryptor.decode(params[:original_pagelet_options])
-      pagelet_options(opts)
+  def append_pagelet_view_paths
+    self.view_paths.unshift 'app/pagelets/'
+
+    # lookup_context.prefixes.clear
+    view = "#{controller_name}/views"
+    if lookup_context.prefixes.exclude?(view)
+      lookup_context.prefixes.unshift "#{controller_name}/views"
+    end
+
+    # https://github.com/rails/actionpack-action_caching/issues/32
+    if lookup_context.formats.exclude?(:html)
+      lookup_context.formats.unshift :html
     end
   end
 
-  def process_action *args
-    super.tap do
-      if params[:target_container] &&
-        action_has_layout? &&
-        request.format.js? #&& self.response_body.first[0] == '<'
-
-        response.content_type = 'text/javascript'
-
-        html = self.response_body.reduce('') { |memo, body|
-          memo << body
-          memo
-        }
-
-        id = ActionController::Base.helpers.escape_javascript params[:target_container]
-        js = ActionController::Base.helpers.escape_javascript html
-
-        html = ActionController::Base.helpers.raw(
-          "pagelet_place_into_container('#{id}', '#{js}');"
-        )
-
-        self.response_body = [html]
-      end
+  def merge_original_pagelet_options
+    if params[:original_pagelet_options]
+      opts = PageletRails::Encryptor.decode(params[:original_pagelet_options])
+      pagelet_options(opts)
     end
   end
 
@@ -83,7 +59,7 @@ module PageletRails::Concerns::Controller
       render_remotely = true
     when :turbolinks
       # render now if request coming from turbolinks
-      is_turbolinks_request = !!request.headers['Turbolinks-Referrer']
+      is_turbolinks_request = request.headers['Turbolinks-Referrer'].present?
       render_remotely = !is_turbolinks_request
     when true
       render_remotely = true
