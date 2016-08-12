@@ -7,6 +7,8 @@ class PageletProxyController < ::ApplicationController
 
     response.headers['Content-Type'] = 'text/javascript'
 
+    response.stream.write "\n"
+
     @urls.each do |url|
       response.stream.write pagelet(url)
       response.stream.write "\n\n//\n\n"

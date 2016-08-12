@@ -3,7 +3,7 @@ module PageletsHelper
   def pagelet_stream
     return nil if pagelet_stream_objects.empty?
     pagelet_stream_objects.each do |key, block|
-      concat content_tag('script', raw("PageletRails.pagelet_arrived('#{key}', '#{j capture(&block)}');\n"), type: 'text/javascript')
+      concat content_tag('script', raw("PageletRails.pageletArrived('#{key}', '#{j capture(&block)}');\n"), type: 'text/javascript')
     end
     nil
   end
