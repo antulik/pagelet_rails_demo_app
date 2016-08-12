@@ -12,11 +12,9 @@ class PageletRails::Router
       next unless controller.respond_to? :load_pagelet_routes!
 
       context.instance_eval do
-        # namespace :pagelets do
-          scope module: pagelet_name, path: "/pagelets", as: "pagelets" do
-            controller.load_pagelet_routes! self
-          end
-        # end
+        scope module: pagelet_name, path: "/pagelets", as: "pagelets" do
+          controller.load_pagelet_routes! self
+        end
       end
 
     end

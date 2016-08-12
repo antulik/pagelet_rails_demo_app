@@ -1,3 +1,6 @@
+# Cloned from https://github.com/rails/actionpack-action_caching
+# as it does not support rails 5 yet
+
 require 'action_controller/caching/actions'
 
 module ActionController
