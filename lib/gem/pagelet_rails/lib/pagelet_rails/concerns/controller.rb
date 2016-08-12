@@ -61,7 +61,7 @@ module PageletRails::Concerns::Controller
       # render now if request coming from turbolinks
       is_turbolinks_request = request.headers['Turbolinks-Referrer'].present?
       render_remotely = !is_turbolinks_request
-    when true
+    when true, :ajax
       render_remotely = true
     else
       render_remotely = false

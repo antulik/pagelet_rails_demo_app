@@ -18,8 +18,8 @@ Don't make your users wait for page to load.
 ![](https://camo.githubusercontent.com/50f4078cc4015e3df89afc753a5ff79828ac0e8e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f662e636c2e6c792f6974656d732f303031323133314d324b3147335831483276314f2f313433303033383036373738372e6a7067)
 
 For example let's take facebook user home page. It has A LOT of data, but it loads very quickly. How? The answer is [perceived performance](https://en.wikipedia.org/wiki/Perceived_performance). It's not about in how many milliseconds you can serve request, but how fast it **feels** to the user. 
-    
-The page body is served instantly and all the data is loaded after. Even for facebook it takes multiple seconds to fully load the page. But it feels instant, that it is all about.    
+
+The page body is served instantly and all the data is loaded after. Even for facebook it takes multiple seconds to fully load the page. But it feels instant, that it's all about.
 
 # Who is doing that?
 
@@ -103,8 +103,8 @@ Example
 ```
 
 Options for `remote`:
-* `true` - always render pagelet through ajax
-* `:turbolinks`  - render pagelet throught ajax, but inline if it's a turbolinks page visit
+* `true`, `:ajax` - always render pagelet through ajax
+* `:turbolinks`  - same as `:ajax` but inline for turbolinks page visit
 * `false` or missing - render inline
 * `:stream` - (aka BigPipe) render placeholder and render full version at the end of html. See streaming for more info.
 
