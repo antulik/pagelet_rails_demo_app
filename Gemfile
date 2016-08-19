@@ -16,7 +16,7 @@ gem 'rails', '~> 5.0.0'
 # gem 'sqlite3'
 gem 'pg'
 
-gem 'pagelet_rails', path: 'lib/gem'
+gem 'pagelet_rails'
 gem 'bootstrap_form'
 
 # Use Puma as the app server
