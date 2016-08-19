@@ -3,9 +3,6 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-jquery.transit'
-  # gem 'rails-assets-pjax'
-  # gem 'rails-assets-jquery-pjax'
   gem 'rails-assets-bootstrap', '3.3.6'
 end
 
@@ -54,7 +51,6 @@ group :development, :test do
 end
 
 gem 'slim'
-gem 'ejs'
 gem "octokit", "~> 4.0"
 gem "colorize"
 

@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require turbolinks
 
-//= require jquery.transit
 //= require pagelet_rails
 
 
