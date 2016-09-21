@@ -1,8 +1,10 @@
 class GithubStargazers::GithubStargazersController < ::PageletController
 
-  pagelet_resources only: :show
+  pagelet_resource only: :show
 
   pagelet_options placeholder: {text: "Loading Stargazers..."}
+
+  pagelet_options expires_in: 5.minutes, cache_path: (Proc.new { params.permit(:repo) })
 
   def show
     @repo = params[:repo]
