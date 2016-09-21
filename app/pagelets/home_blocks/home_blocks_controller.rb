@@ -21,10 +21,7 @@ class HomeBlocks::HomeBlocksController < ::PageletController
   end
 
   def show
-    case params[:id]
-    when 'remote_turbolinks'
-      sleep 1 if request.xhr?
-    when 'remote_true', 'remote_stream'
+    if params[:id] != 'remote_false' && !request.headers["Turbolinks-Referrer"]
       sleep 1
     end
 
