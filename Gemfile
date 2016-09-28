@@ -13,7 +13,7 @@ gem 'rails', '~> 5.0.0'
 # gem 'sqlite3'
 gem 'pg'
 
-gem 'pagelet_rails'
+gem 'pagelet_rails', git: 'https://github.com/antulik/pagelet_rails.git', branch: 'master'
 gem 'bootstrap_form'
 
 # Use Puma as the app server
