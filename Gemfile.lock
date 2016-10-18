@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/antulik/pagelet_rails.git
-  revision: 466298601a8deef1f6f0b74d49ae8965095c705b
+  revision: a3753c224768ce13fee850ce11f17a89ca329dd7
   branch: master
   specs:
-    pagelet_rails (0.1.2)
+    pagelet_rails (0.1.6)
       ejs
       rails (>= 4.0.0)
 
