@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/antulik/pagelet_rails.git
-  revision: 06410945f76582f878ce373abcbe17f50f595577
+  revision: 8ad5ac979c88c3c33b9098241ae13ad563f1ee07
   branch: master
   specs:
     pagelet_rails (0.1.6)
