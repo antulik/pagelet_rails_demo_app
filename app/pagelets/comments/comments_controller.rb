@@ -28,6 +28,8 @@ class Comments::CommentsController < ::PageletController
     comment = Comment.find params[:id]
 
     if comment.destroy
+      redirect_to tab_path('comments')
+    else
       index
       render :index
     end
