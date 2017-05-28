@@ -1,8 +1,9 @@
 class Comments::CommentsController < ::PageletController
 
-  pagelet_resources only: [:show, :new, :create, :index, :destroy]
+  pagelet_resources only: [:new, :create, :index, :destroy]
 
   def index
+    identified_by :comments
     @comments = Comment.all.order(id: :desc)
   end
 
@@ -15,23 +16,21 @@ class Comments::CommentsController < ::PageletController
     @comment = Comment.new attrs
 
     if @comment.save
-      redirect_to tab_path('comments')
-    else
-      render :new
+      trigger_change :comments
+      new
     end
-  end
 
-  def show
+    render :new
   end
 
   def destroy
     comment = Comment.find params[:id]
 
     if comment.destroy
-      redirect_to tab_path('comments')
-    else
-      index
-      render :index
+      trigger_change :comments
     end
+
+    index
+    render :index
   end
 end
