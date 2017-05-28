@@ -1,6 +1,6 @@
 class Comments::CommentsController < ::PageletController
 
-  pagelet_resources only: [:new, :create, :index, :destroy]
+  pagelet_resources only: [:show, :new, :create, :index, :destroy]
 
   def index
     identified_by :comments
@@ -21,6 +21,9 @@ class Comments::CommentsController < ::PageletController
     end
 
     render :new
+  end
+
+  def show
   end
 
   def destroy
