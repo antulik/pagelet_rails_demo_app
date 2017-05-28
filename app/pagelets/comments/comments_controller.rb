@@ -1,6 +1,6 @@
 class Comments::CommentsController < ::PageletController
 
-  pagelet_resources only: [:show, :new, :create, :index, :destroy]
+  pagelet_resources only: [:new, :create, :index, :destroy]
 
   def index
     identified_by :comments
@@ -17,13 +17,10 @@ class Comments::CommentsController < ::PageletController
 
     if @comment.save
       trigger_change :comments
-      new
+      redirect_to action: :new
+    else
+      render :new
     end
-
-    render :new
-  end
-
-  def show
   end
 
   def destroy
@@ -33,7 +30,6 @@ class Comments::CommentsController < ::PageletController
       trigger_change :comments
     end
 
-    index
-    render :index
+    redirect_to action: :index
   end
 end
